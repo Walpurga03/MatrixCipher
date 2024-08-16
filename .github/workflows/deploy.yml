@@ -26,5 +26,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.AUGUST_TOKEN }}
           publish_dir: ./dist  # Hier wird sichergestellt, dass der dist-Ordner verwendet wird
