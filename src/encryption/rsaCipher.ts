@@ -71,8 +71,10 @@ function showKeyPairGeneration() {
         <button id="rsaGenerateKeysButton">Generate Keys</button>
         <label for="rsaPublicKey">Public Key:</label>
         <textarea id="rsaPublicKey" readonly></textarea>
+        <button id="savePublicKeyButton">💾</button>
         <label for="rsaPrivateKey">Private Key:</label>
         <textarea id="rsaPrivateKey" readonly></textarea>
+        <button id="savePrivateKeyButton">💾</button>
         <button id="rsaContinueButton" style="display: none;">Continue</button>
       </div>
     `;
@@ -80,6 +82,8 @@ function showKeyPairGeneration() {
 
     document.getElementById('rsaGenerateKeysButton')?.addEventListener('click', handleGenerateKeysButtonClick);
     document.getElementById('rsaContinueButton')?.addEventListener('click', showEncryptionDecryptionOptions);
+    document.getElementById('savePublicKeyButton')?.addEventListener('click', () => saveKey('rsaPublicKey', 'public_key.txt'));
+    document.getElementById('savePrivateKeyButton')?.addEventListener('click', () => saveKey('rsaPrivateKey', 'private_key.txt'));
 }
 
 function handleGenerateKeysButtonClick() {
@@ -167,6 +171,17 @@ function handleDecryptButtonClick() {
     if (computerScreenElement) {
         computerScreenElement.style.display = 'block';
     }
+}
+
+function saveKey(elementId: string, filename: string) {
+    const element = document.getElementById(elementId) as HTMLTextAreaElement;
+    const text = element.value;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const anchor = document.createElement('a');
+    anchor.href = URL.createObjectURL(blob);
+    anchor.download = filename;
+    anchor.click();
+    URL.revokeObjectURL(anchor.href);
 }
 
 export { generateKeyPair, encrypt, decrypt };
