@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatrixCipher</title>
+    <link rel="stylesheet" href="/src/styles/style.scss">
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+    <div id="computer-container">
+        <div id="computer-screen">
+            <div id="text-container">
+                <div id="message"></div>
+                <div id="menu" style="display: none;">
+                    <h3>Select encryption method:</h3>
+                    <ul>
+                        <li onclick="selectMethod('Caesar Cipher')" data-tooltip="Shift letters by a fixed amount">Caesar Cipher</li>
+                        <li onclick="selectMethod('Vigenère Cipher')" data-tooltip="Encrypt with a repeating key">Vigenère Cipher</li>
+                        <li onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">XOR</li>
+                        <li onclick="selectMethod('Blowfish')" data-tooltip="Symmetric block cipher">Blowfish</li>
+                        <li onclick="selectMethod('SHA-256')" data-tooltip="Secure hash algorithm, 256-bit">SHA-256</li>
+                        <li onclick="selectMethod('RIPEMD-160')" data-tooltip="160-bit cryptographic hash function">RIPEMD-160</li>
+                        <li onclick="selectMethod('AES')" data-tooltip="Advanced Encryption Standard">AES</li>
+                        <li onclick="selectMethod('RSA')" data-tooltip="Asymmetric encryption using public and private keys">RSA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Platzhalter für Eingabe-Popups, die durch JavaScript gesteuert werden -->
+    <div id="input-bar" style="display: none;"></div>
+    <script src="https://embed.twentyuno.net/js/app.js"></script>
+
+
+    <script type="module">
+        import startTextAnimation from '/src/animation.ts';
+        import startMatrixAnimation from '/src/matrix_rain.ts';
+        import { selectMethod } from '/src/encryption/encryptions.ts';
+
+        startTextAnimation();
+        startMatrixAnimation('matrixCanvas');
+
+        window.selectMethod = selectMethod; // Exportiert die selectMethod-Funktion für das HTML
+    </script>
+</body>
+</html>

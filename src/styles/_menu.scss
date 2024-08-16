@@ -1,0 +1,51 @@
+/* menu.scss */
+#menu {
+  display: none;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#menu li {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid var(--primary-color);
+  margin: 5px 0;
+  transition: background-color 0.3s;
+}
+
+#menu li:hover {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+}
+
+[data-tooltip] {
+  position: relative;
+  cursor: pointer;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: fixed;
+  top: 1em;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  padding: 1em;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 1000;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+}

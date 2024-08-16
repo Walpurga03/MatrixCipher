@@ -1,0 +1,17 @@
+/* layout.scss */
+#computer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#computer-screen {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--primary-color);
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: var(--box-shadow);
+}

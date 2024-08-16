@@ -1,0 +1,81 @@
+/* popup.scss */
+.popup {
+  background-color: rgba(0, 0, 0, 1);
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 20px;
+  color: var(--primary-color);
+  font-family: var(--font-family);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60vw;
+  @media (max-width: #{$breakpoint-sm}) { /* 768px */
+    width: 80vw;
+  }
+}
+
+.popup h3 {
+  margin-bottom: 20px;
+}
+.popup a {
+ color: aqua;
+}
+
+.popup label {
+  display: block;
+  margin-bottom: 5px;
+  text-align: left;
+  font-weight: bold;
+  width: 100%;
+}
+
+.popup input[type="text"],
+.popup input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--primary-color);
+}
+
+.popup button {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--background-color);
+  transition: background-color 0.3s ease;
+}
+
+.popup button:hover {
+  background-color: var(--secondary-color);
+}
+
+.popup .button-container {
+  display: flex;
+  gap: 10px; /* Abstand zwischen den Buttons */
+}
+
+.popup textarea {
+  width: 100%;
+  height: 200px; /* Höhe anpassen, um mehr Platz zu schaffen */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--primary-color);
+  resize: vertical; /* Ermöglicht das manuelle Anpassen der Höhe */
+}

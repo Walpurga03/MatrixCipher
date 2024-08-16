@@ -1,0 +1,35 @@
+#input-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: var(--primary-color);
+  padding: 10px;
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 100;
+  box-shadow: var(--inset-box-shadow);
+  font-family: var(--font-family);
+  white-space: normal; /* Zeilenumbruch bei Bedarf */
+  overflow-wrap: break-word; /* Lange Wörter umbrechen */
+  font-size: 1em;
+}
+
+#input-bar div {
+  text-align: center;
+  margin: 0 10px;
+  max-width: 95vw; 
+  white-space: normal; /* Erlaubt Zeilenumbrüche */
+  overflow-wrap: break-word; /* Zeilenumbruch bei langen Wörtern */
+  word-wrap: break-word;
+}
+
+#selectedMethod, #inputTextDisplay, #encryptedText {
+  margin: 0 10px;
+  max-width: 95vw;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
