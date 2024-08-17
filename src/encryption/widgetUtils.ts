@@ -15,6 +15,11 @@ export function initializeAndShowWidget() {
             ></lightning-widget>
         `;
         widgetContainer.style.display = 'none'; // Setzt den Widget-Container standardmäßig auf 'none'
+        widgetContainer.style.position = 'fixed'; // Setzt die Position des Containers auf 'fixed'
+        widgetContainer.style.zIndex = '10000'; // Setzt den z-index auf einen sehr hohen Wert
+        widgetContainer.style.top = '0'; // Setzt den Container ganz oben
+        widgetContainer.style.left = '0'; // Setzt den Container ganz links
+        widgetContainer.style.width = '100%'; // Setzt die Breite des Containers auf 100%
         document.body.appendChild(widgetContainer);
 
         // Setze die Attribute des Widgets
