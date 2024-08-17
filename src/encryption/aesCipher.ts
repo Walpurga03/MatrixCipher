@@ -1,5 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { displayResult } from './encryptions';
+import { initializeAndShowWidget, hideWidget } from './widgetUtils';
+
 
 export function showAesCipherPopup() {
     const inputBar = document.getElementById('input-bar') as HTMLElement;
@@ -33,10 +35,12 @@ export function showAesCipherPopup() {
     document.getElementById('aesInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('aesInfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
+        initializeAndShowWidget();
     });
     document.getElementById('aesCloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('aesInfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
+        hideWidget();
     });
 }
 

@@ -1,4 +1,5 @@
 import { displayResult } from './encryptions';
+import { initializeAndShowWidget, hideWidget } from './widgetUtils';
 
 export function showCaesarCipherPopup() {
     const inputBar = document.getElementById('input-bar') as HTMLElement;
@@ -31,10 +32,12 @@ export function showCaesarCipherPopup() {
     document.getElementById('caesarInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('caesarInfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
+        initializeAndShowWidget();
     });
     document.getElementById('caesarCloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('caesarInfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
+        hideWidget();
     });
 }
 

@@ -1,4 +1,6 @@
 import { displayResult } from './encryptions';
+import { initializeAndShowWidget, hideWidget } from './widgetUtils';
+
 
 export function showVigenereCipherPopup() {
     const inputBar = document.getElementById('input-bar') as HTMLElement;
@@ -32,10 +34,12 @@ export function showVigenereCipherPopup() {
     document.getElementById('vigenereInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('vigenereInfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
+        initializeAndShowWidget();
     });
     document.getElementById('vigenereCloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('vigenereInfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
+        hideWidget();
     });
 }
 

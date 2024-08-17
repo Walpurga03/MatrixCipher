@@ -1,5 +1,7 @@
 import { generateKeyPair, encrypt, decrypt } from './rsaUtils';
 import { displayResult } from './encryptions';
+import { initializeAndShowWidget, hideWidget } from './widgetUtils';
+
 
 export function showRsaCipherPopup() {
     const inputBar = document.getElementById('input-bar') as HTMLElement;
@@ -29,10 +31,13 @@ export function showRsaCipherPopup() {
     document.getElementById('rsaInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('rsaInfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
+        initializeAndShowWidget();
+
     });
     document.getElementById('rsaCloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('rsaInfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
+        hideWidget();
     });
 }
 
