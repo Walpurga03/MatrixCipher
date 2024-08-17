@@ -1,6 +1,80 @@
 import { displayResult } from './encryptions';
 import { initializeAndShowWidget, hideWidget } from './widgetUtils';
 
+function isAlphabetic(str: string): boolean {
+    return /^[a-zA-Z]+$/.test(str);
+}
+
+function validateVigenereInput(inputText: string, key: string, messageElement: HTMLElement): boolean {
+    if (inputText.length === 0 || key.length === 0) {
+        messageElement.innerText = 'Please enter valid text and key.';
+        messageElement.style.display = 'block';
+        return false;
+    }
+
+    if (!isAlphabetic(key)) {
+        messageElement.innerText = 'Please enter a key containing only alphabetic characters.';
+        messageElement.style.display = 'block';
+        return false;
+    }
+
+    return true;
+}
+
+function handleEncryptButtonClick() {
+    const inputElement = document.getElementById('vigenereInput') as HTMLInputElement;
+    const keyElement = document.getElementById('vigenereKey') as HTMLInputElement;
+    const messageElement = document.getElementById('vigenereMessage') as HTMLElement;
+    const inputText = inputElement.value;
+    const key = keyElement.value;
+
+    if (!validateVigenereInput(inputText, key, messageElement)) {
+        return;
+    }
+
+    const encryptedText = vigenereCipher(inputText, key, true);
+    displayResult('Vigenère Encryption', inputText, encryptedText);
+
+    closePopup('vigenereCipherPopup');
+    showMenuAndScreen();
+}
+
+function handleDecryptButtonClick() {
+    const inputElement = document.getElementById('vigenereInput') as HTMLInputElement;
+    const keyElement = document.getElementById('vigenereKey') as HTMLInputElement;
+    const messageElement = document.getElementById('vigenereMessage') as HTMLElement;
+    const inputText = inputElement.value;
+    const key = keyElement.value;
+
+    if (!validateVigenereInput(inputText, key, messageElement)) {
+        return;
+    }
+
+    const decryptedText = vigenereCipher(inputText, key, false);
+    displayResult('Vigenère Decryption', inputText, decryptedText);
+
+    closePopup('vigenereCipherPopup');
+    showMenuAndScreen();
+}
+
+function closePopup(popupId: string) {
+    const popup = document.getElementById(popupId) as HTMLElement;
+    if (popup) {
+        popup.remove();
+    }
+}
+
+function showMenuAndScreen() {
+    const menuElement = document.getElementById('menu') as HTMLElement;
+    if (menuElement) {
+        menuElement.style.display = 'block';
+    }
+
+    const computerScreenElement = document.getElementById('computer-screen') as HTMLElement;
+    if (computerScreenElement) {
+        computerScreenElement.style.display = 'block';
+    }
+}
 
 export function showVigenereCipherPopup() {
     const inputBar = document.getElementById('input-bar') as HTMLElement;
@@ -41,70 +115,6 @@ export function showVigenereCipherPopup() {
         infoPopup.style.display = 'none';
         hideWidget();
     });
-}
-
-function handleEncryptButtonClick() {
-    const inputElement = document.getElementById('vigenereInput') as HTMLInputElement;
-    const keyElement = document.getElementById('vigenereKey') as HTMLInputElement;
-    const messageElement = document.getElementById('vigenereMessage') as HTMLElement;
-    const inputText = inputElement.value;
-    const key = keyElement.value;
-
-    if (inputText.length === 0 || key.length === 0) {
-        messageElement.innerText = 'Please enter valid text and key.';
-        messageElement.style.display = 'block';
-        return;
-    }
-
-    const encryptedText = vigenereCipher(inputText, key, true);
-    displayResult('Vigenère Encryption', inputText, encryptedText);
-
-    const popup = document.getElementById('vigenereCipherPopup') as HTMLElement;
-    if (popup) {
-        popup.remove();
-    }
-
-    const menuElement = document.getElementById('menu') as HTMLElement;
-    if (menuElement) {
-        menuElement.style.display = 'block';
-    }
-
-    const computerScreenElement = document.getElementById('computer-screen') as HTMLElement;
-    if (computerScreenElement) {
-        computerScreenElement.style.display = 'block';
-    }
-}
-
-function handleDecryptButtonClick() {
-    const inputElement = document.getElementById('vigenereInput') as HTMLInputElement;
-    const keyElement = document.getElementById('vigenereKey') as HTMLInputElement;
-    const messageElement = document.getElementById('vigenereMessage') as HTMLElement;
-    const inputText = inputElement.value;
-    const key = keyElement.value;
-
-    if (inputText.length === 0 || key.length === 0) {
-        messageElement.innerText = 'Please enter valid text and key.';
-        messageElement.style.display = 'block';
-        return;
-    }
-
-    const decryptedText = vigenereCipher(inputText, key, false);
-    displayResult('Vigenère Decryption', inputText, decryptedText);
-
-    const popup = document.getElementById('vigenereCipherPopup') as HTMLElement;
-    if (popup) {
-        popup.remove();
-    }
-
-    const menuElement = document.getElementById('menu') as HTMLElement;
-    if (menuElement) {
-        menuElement.style.display = 'block';
-    }
-
-    const computerScreenElement = document.getElementById('computer-screen') as HTMLElement;
-    if (computerScreenElement) {
-        computerScreenElement.style.display = 'block';
-    }
 }
 
 export function vigenereCipher(text: string, key: string, isEncrypt: boolean): string {

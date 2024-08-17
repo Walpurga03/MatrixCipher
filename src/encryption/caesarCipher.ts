@@ -1,6 +1,53 @@
 import { displayResult } from './encryptions';
 import { initializeAndShowWidget, hideWidget } from './widgetUtils';
+const MIN_KEY = 1;
+const MAX_KEY = 25;
 
+function validateInput(inputText: string, key: number, messageElement: HTMLElement): boolean {
+    if (inputText.length === 0) {
+        messageElement.innerText = 'Please enter a valid text.';
+        messageElement.style.display = 'block';
+        return false;
+    }
+
+    if (isNaN(key) || key < MIN_KEY || key > MAX_KEY) {
+        messageElement.innerText = `Please enter a valid key between ${MIN_KEY} and ${MAX_KEY}.`;
+        messageElement.style.display = 'block';
+        return false;
+    }
+
+    return true;
+}
+
+function handleDecryptButtonClick() {
+    const inputElement = document.getElementById('caesarInput') as HTMLInputElement;
+    const keyElement = document.getElementById('caesarKey') as HTMLInputElement;
+    const messageElement = document.getElementById('caesarMessage') as HTMLElement;
+    const inputText = inputElement.value;
+    const key = parseInt(keyElement.value);
+
+    if (!validateInput(inputText, key, messageElement)) {
+        return;
+    }
+
+    const decryptedText = caesarDecipher(inputText, key);
+    displayResult('Caesar Decryption', inputText, decryptedText);
+
+    const popup = document.getElementById('caesarCipherPopup') as HTMLElement;
+    if (popup) {
+        popup.remove();
+    }
+
+    const menuElement = document.getElementById('menu') as HTMLElement;
+    if (menuElement) {
+        menuElement.style.display = 'block';
+    }
+
+    const computerScreenElement = document.getElementById('computer-screen') as HTMLElement;
+    if (computerScreenElement) {
+        computerScreenElement.style.display = 'block';
+    }
+}
 export function showCaesarCipherPopup() {
     const inputBar = document.getElementById('input-bar') as HTMLElement;
 
@@ -54,52 +101,14 @@ function handleEncryptButtonClick() {
         return;
     }
 
-    if (isNaN(key)) {
-        messageElement.innerText = 'Please enter a valid key.';
+    if (isNaN(key) || key < 1 || key > 25) {
+        messageElement.innerText = 'Please enter a valid key between 1 and 25.';
         messageElement.style.display = 'block';
         return;
     }
 
     const encryptedText = caesarCipher(inputText, key);
     displayResult('Caesar Encryption', inputText, encryptedText);
-
-    const popup = document.getElementById('caesarCipherPopup') as HTMLElement;
-    if (popup) {
-        popup.remove();
-    }
-
-    const menuElement = document.getElementById('menu') as HTMLElement;
-    if (menuElement) {
-        menuElement.style.display = 'block';
-    }
-
-    const computerScreenElement = document.getElementById('computer-screen') as HTMLElement;
-    if (computerScreenElement) {
-        computerScreenElement.style.display = 'block';
-    }
-}
-
-function handleDecryptButtonClick() {
-    const inputElement = document.getElementById('caesarInput') as HTMLInputElement;
-    const keyElement = document.getElementById('caesarKey') as HTMLInputElement;
-    const messageElement = document.getElementById('caesarMessage') as HTMLElement;
-    const inputText = inputElement.value;
-    const key = parseInt(keyElement.value);
-
-    if (inputText.length === 0) {
-        messageElement.innerText = 'Please enter a valid text.';
-        messageElement.style.display = 'block';
-        return;
-    }
-
-    if (isNaN(key)) {
-        messageElement.innerText = 'Please enter a valid key.';
-        messageElement.style.display = 'block';
-        return;
-    }
-
-    const decryptedText = caesarDecipher(inputText, key);
-    displayResult('Caesar Decryption', inputText, decryptedText);
 
     const popup = document.getElementById('caesarCipherPopup') as HTMLElement;
     if (popup) {
