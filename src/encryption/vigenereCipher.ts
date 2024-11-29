@@ -1,5 +1,4 @@
 import { displayResult } from './encryptions';
-import { initializeAndShowWidget, hideWidget } from './widgetUtils';
 
 function isAlphabetic(str: string): boolean {
     return /^[a-zA-Z]+$/.test(str);
@@ -32,11 +31,14 @@ function handleEncryptButtonClick() {
         return;
     }
 
-    const encryptedText = vigenereCipher(inputText, key, true);
+    const encryptedText = vigenereEncrypt(inputText, key);
     displayResult('Vigenère Encryption', inputText, encryptedText);
 
-    closePopup('vigenereCipherPopup');
-    showMenuAndScreen();
+    // Cleanup
+    const overlay = document.querySelector('.popup-overlay');
+    const popup = document.querySelector('.popup');
+    if (overlay?.parentNode) overlay.parentNode.removeChild(overlay);
+    if (popup?.parentNode) popup.parentNode.removeChild(popup);
 }
 
 function handleDecryptButtonClick() {
@@ -50,99 +52,198 @@ function handleDecryptButtonClick() {
         return;
     }
 
-    const decryptedText = vigenereCipher(inputText, key, false);
+    const decryptedText = vigenereDecrypt(inputText, key);
     displayResult('Vigenère Decryption', inputText, decryptedText);
 
-    closePopup('vigenereCipherPopup');
-    showMenuAndScreen();
-}
-
-function closePopup(popupId: string) {
-    const popup = document.getElementById(popupId) as HTMLElement;
-    if (popup) {
-        popup.remove();
-    }
-}
-
-function showMenuAndScreen() {
-    const menuElement = document.getElementById('menu') as HTMLElement;
-    if (menuElement) {
-        menuElement.style.display = 'block';
-    }
-
-    const computerScreenElement = document.getElementById('computer-screen') as HTMLElement;
-    if (computerScreenElement) {
-        computerScreenElement.style.display = 'block';
-    }
+    // Cleanup
+    const overlay = document.querySelector('.popup-overlay');
+    const popup = document.querySelector('.popup');
+    if (overlay?.parentNode) overlay.parentNode.removeChild(overlay);
+    if (popup?.parentNode) popup.parentNode.removeChild(popup);
 }
 
 export function showVigenereCipherPopup() {
-    const inputBar = document.getElementById('input-bar') as HTMLElement;
+    // Erstelle Overlay für Blur-Effekt
+    const overlay = document.createElement('div');
+    overlay.className = 'popup-overlay';
+    document.body.appendChild(overlay);
 
-    inputBar.innerHTML = `
-      <div id="vigenereCipherPopup" class="popup">
+    // Erstelle das Hauptpopup
+    const popup = document.createElement('div');
+    popup.className = 'popup';
+    popup.innerHTML = `
         <h3>Vigenère Encryption/Decryption</h3>
-        <label for="vigenereInput">Enter text:</label>
-        <input type="text" id="vigenereInput" placeholder="Enter text here">
-        <label for="vigenereKey">Enter key:</label>
-        <input type="text" id="vigenereKey" placeholder="Enter key here">
-        <div class="button-group">
-            <button id="vigenereEncryptButton">Encrypt</button>
-            <button id="vigenereDecryptButton">Decrypt</button>
-            <button id="vigenereInfoButton">Info</button>
+        <div style="width: 100%;">
+            <label for="vigenereInput">Enter text:</label>
+            <input type="text" id="vigenereInput" placeholder="Enter text to encrypt/decrypt">
+            
+            <label for="vigenereKey">Enter key (letters only):</label>
+            <input type="text" id="vigenereKey" placeholder="Enter encryption key">
+            
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                <button id="vigenereEncryptButton">Encrypt</button>
+                <button id="vigenereDecryptButton">Decrypt</button>
+                <button id="vigenereInfoButton">Info</button>
+            </div>
+            
+            <div id="vigenereMessage" class="message" style="display: none; color: #ff4444; margin-top: 15px; text-align: center;"></div>
         </div>
-        <div id="vigenereMessage" class="message" style="display: none; color: red;"></div>
-      </div>
-      <div id="vigenereInfoPopup" class="popup" style="display: none;">
-        <h3>Vigenère Encryption</h3>
-        <p>The Vigenère cipher is a method of encrypting alphabetic text by using a simple form of polyalphabetic substitution.</p>
-        <p>A keyword is used to shift the letters of the plaintext. Each letter in the keyword shifts corresponding letters in the plaintext.</p>
-        <p>For more information, visit the <a href="https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher" target="_blank">Wikipedia page</a>.</p>
-        <button id="vigenereCloseInfoButton">Close</button>
-      </div>
     `;
-    inputBar.style.display = 'block';
+    document.body.appendChild(popup);
 
-    document.getElementById('vigenereEncryptButton')?.addEventListener('click', handleEncryptButtonClick);
-    document.getElementById('vigenereDecryptButton')?.addEventListener('click', handleDecryptButtonClick);
-    document.getElementById('vigenereInfoButton')?.addEventListener('click', () => {
-        const infoPopup = document.getElementById('vigenereInfoPopup') as HTMLElement;
-        infoPopup.style.display = 'block';
-        initializeAndShowWidget();
-    });
-    document.getElementById('vigenereCloseInfoButton')?.addEventListener('click', () => {
-        const infoPopup = document.getElementById('vigenereInfoPopup') as HTMLElement;
-        infoPopup.style.display = 'none';
-        hideWidget();
-    });
-}
+    // Info Popup (initially hidden)
+    const infoPopup = document.createElement('div');
+    infoPopup.className = 'popup';
+    infoPopup.style.display = 'none';
+    const infoContent = `
+        <h3>Die Vigenère-Verschlüsselung</h3>
+        <div style="text-align: left; padding: 15px;">
+            <p>Die Vigenère-Verschlüsselung ist eine erweiterte Form der Caesar-Verschlüsselung, die im 16. Jahrhundert entwickelt wurde. Sie verwendet ein Schlüsselwort, um den Text zu verschlüsseln.</p>
+            
+            <h4 style="color: #00ff00; margin: 15px 0;">Wie funktioniert es?</h4>
+            <p>1. Der Schlüssel wird wiederholt, bis er die Länge des Textes erreicht:<br>
+               Text: HALLO MATRIX<br>
+               Key:  CODE CODE CO</p>
+            
+            <p>2. Jeder Buchstabe des Schlüssels bestimmt die Verschiebung für den entsprechenden Buchstaben im Text:<br>
+               C = 3 Positionen<br>
+               O = 15 Positionen<br>
+               D = 4 Positionen<br>
+               E = 5 Positionen</p>
 
-export function vigenereCipher(text: string, key: string, isEncrypt: boolean): string {
-    if (key.length === 0) {
-        return text;
+            <h4 style="color: #00ff00; margin: 15px 0;">Beispiel:</h4>
+            <p>Text: HALLO<br>
+               Key:  CODE<br>
+               Verschlüsselt: JSPZS</p>
+
+            <p>Erklärung der ersten beiden Buchstaben:<br>
+               H + C (3) = J<br>
+               A + O (15) = S</p>
+
+            <h4 style="color: #00ff00; margin: 15px 0;">Vorteile:</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li>✓ Schwerer zu knacken als Caesar</li>
+                <li>✓ Jeder Buchstabe hat eine andere Verschiebung</li>
+                <li>✓ Gleiche Buchstaben werden unterschiedlich verschlüsselt</li>
+            </ul>
+
+            <p style="margin-top: 15px; font-style: italic; color: #00cc00;">Tipp: Verwende ein einfach zu merkendes, aber nicht zu kurzes Schlüsselwort!</p>
+        </div>
+        <div class="button-container">
+            <button id="vigenereCloseInfoButton">Schließen</button>
+        </div>
+    `;
+    infoPopup.innerHTML = infoContent;
+    document.body.appendChild(infoPopup);
+
+    // Event Listeners
+    const encryptButton = document.getElementById('vigenereEncryptButton');
+    const decryptButton = document.getElementById('vigenereDecryptButton');
+    const infoButton = document.getElementById('vigenereInfoButton');
+    const closeInfoButton = document.getElementById('vigenereCloseInfoButton');
+
+    if (encryptButton) {
+        encryptButton.addEventListener('click', handleEncryptButtonClick);
+    }
+    if (decryptButton) {
+        decryptButton.addEventListener('click', handleDecryptButtonClick);
+    }
+    if (infoButton) {
+        infoButton.addEventListener('click', () => {
+            infoPopup.style.display = 'block';
+        });
+    }
+    if (closeInfoButton) {
+        closeInfoButton.addEventListener('click', () => {
+            infoPopup.style.display = 'none';
+        });
     }
 
-    const keyLength = key.length;
+    // Cleanup function
+    const cleanup = () => {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        if (popup.parentNode) popup.parentNode.removeChild(popup);
+        if (infoPopup.parentNode) infoPopup.parentNode.removeChild(infoPopup);
+        
+        const menuElement = document.getElementById('menu');
+        const computerScreen = document.getElementById('computer-screen');
+        
+        if (menuElement) menuElement.style.display = 'block';
+        if (computerScreen) computerScreen.style.display = 'block';
+    };
+
+    // Add Back to Menu button to main popup
+    const mainBackToMenuButton = document.createElement('button');
+    mainBackToMenuButton.textContent = 'Back to Menu';
+    mainBackToMenuButton.style.marginTop = '20px';
+    mainBackToMenuButton.addEventListener('click', cleanup);
+    popup.appendChild(mainBackToMenuButton);
+}
+
+export function vigenereEncrypt(text: string, key: string): string {
+    // Schlüssel auf Buchstaben normalisieren und in Großbuchstaben umwandeln
+    const normalizedKey = key.replace(/[^a-z]/gi, '').toUpperCase();
+    if (normalizedKey.length === 0) return text;
+
+    let result = '';
     let keyIndex = 0;
-    const lowerKey = key.toLowerCase();
 
-    const processedText = text.split('').map(char => {
-        const charCode = char.charCodeAt(0);
-
-        if (!char.match(/[a-zA-Z]/)) {
-            return char;
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        // Prüfe, ob es ein Buchstabe ist
+        if (char.match(/[a-z]/i)) {
+            const isUpperCase = char === char.toUpperCase();
+            const charCode = char.toUpperCase().charCodeAt(0) - 65;
+            const keyChar = normalizedKey[keyIndex % normalizedKey.length];
+            const keyShift = keyChar.charCodeAt(0) - 65;
+            
+            // Vigenère-Verschlüsselung: (Buchstabe + Schlüssel) mod 26
+            let encryptedCode = (charCode + keyShift) % 26;
+            
+            // Konvertiere zurück in einen Buchstaben und behalte Groß-/Kleinschreibung bei
+            let encryptedChar = String.fromCharCode(encryptedCode + 65);
+            result += isUpperCase ? encryptedChar : encryptedChar.toLowerCase();
+            
+            keyIndex++;
+        } else {
+            // Behalte Nicht-Buchstaben unverändert
+            result += char;
         }
+    }
+    
+    return result;
+}
 
-        const keyCharCode = lowerKey[keyIndex % keyLength].charCodeAt(0);
-        const base = charCode >= 97 ? 97 : 65;
-        const keyBase = 97;
-        const shift = isEncrypt ? (keyCharCode - keyBase) : -(keyCharCode - keyBase);
-        const processedChar = String.fromCharCode(((charCode - base + shift + 26) % 26) + base);
+export function vigenereDecrypt(text: string, key: string): string {
+    // Schlüssel auf Buchstaben normalisieren und in Großbuchstaben umwandeln
+    const normalizedKey = key.replace(/[^a-z]/gi, '').toUpperCase();
+    if (normalizedKey.length === 0) return text;
 
-        const finalChar = char === char.toUpperCase() ? processedChar.toUpperCase() : processedChar.toLowerCase();
-        keyIndex++;
-        return finalChar;
-    }).join('');
+    let result = '';
+    let keyIndex = 0;
 
-    return processedText;
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        // Prüfe, ob es ein Buchstabe ist
+        if (char.match(/[a-z]/i)) {
+            const isUpperCase = char === char.toUpperCase();
+            const charCode = char.toUpperCase().charCodeAt(0) - 65;
+            const keyChar = normalizedKey[keyIndex % normalizedKey.length];
+            const keyShift = keyChar.charCodeAt(0) - 65;
+            
+            // Vigenère-Entschlüsselung: (Buchstabe - Schlüssel + 26) mod 26
+            let decryptedCode = (charCode - keyShift + 26) % 26;
+            
+            // Konvertiere zurück in einen Buchstaben und behalte Groß-/Kleinschreibung bei
+            let decryptedChar = String.fromCharCode(decryptedCode + 65);
+            result += isUpperCase ? decryptedChar : decryptedChar.toLowerCase();
+            
+            keyIndex++;
+        } else {
+            // Behalte Nicht-Buchstaben unverändert
+            result += char;
+        }
+    }
+    
+    return result;
 }

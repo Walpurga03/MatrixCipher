@@ -6,6 +6,8 @@ import { showSha256CipherPopup } from './sha256Cipher';
 import { showRipemd160CipherPopup } from './ripemd160Cipher';
 import { showAesCipherPopup } from './aesCipher';
 import { showRsaCipherPopup } from './rsaCipher';
+import { caesarEncrypt, caesarDecrypt } from './caesarCipher';
+import { vigenereEncrypt, vigenereDecrypt } from './vigenereCipher';
 
 // Funktion zum Ausblenden des Menüs und des Widgets
 export function hideMenuAndWidget(menuElement: HTMLElement) {
@@ -20,14 +22,10 @@ export function hideMenuAndWidget(menuElement: HTMLElement) {
 
 export function selectMethod(method: string) {
     const menuElement = document.getElementById('menu') as HTMLElement;
-    const computerScreenElement = document.getElementById('computer-screen') as HTMLElement;
 
-    // Blendet das Menü und den Computer-Screen aus, wenn ein Popup aktiv ist
+    // Blendet nur das Menü aus, wenn ein Popup aktiv ist
     if (menuElement) {
-        hideMenuAndWidget(menuElement);
-    }
-    if (computerScreenElement) {
-        computerScreenElement.style.display = 'none';
+        menuElement.style.display = 'none';
     }
 
     // Zeigt das entsprechende Popup an
@@ -62,4 +60,123 @@ export function displayResult(method: string, input: string, result: string) {
       </div>
     `;
     inputBar.style.display = 'flex';
+}
+
+export function selectMethodNew(method: string) {
+    const inputBar = document.getElementById('input-bar');
+    if (!inputBar) return;
+
+    inputBar.style.display = 'block';
+    inputBar.innerHTML = `
+        <div class="input-container">
+            <h3>Text ${method}</h3>
+            <textarea id="input-text" placeholder="Gib deinen Text ein..."></textarea>
+            <div class="key-container">
+                ${getKeyInput(method)}
+            </div>
+            <div class="button-container">
+                <button onclick="encryptText('${method}')">Verschlüsseln</button>
+                <button onclick="decryptText('${method}')">Entschlüsseln</button>
+            </div>
+            <div id="result"></div>
+        </div>
+    `;
+}
+
+function getKeyInput(method: string): string {
+    switch (method) {
+        case 'Caesar Verschlüsselung':
+            return `
+                <label for="shift">Verschiebung:</label>
+                <input type="number" id="shift" min="1" max="25" value="3">
+            `;
+        case 'Vigenère Verschlüsselung':
+            return `
+                <label for="key">Schlüssel:</label>
+                <input type="text" id="key" placeholder="Schlüsselwort eingeben">
+            `;
+        case 'XOR Verschlüsselung':
+            return `
+                <label for="key">Schlüssel:</label>
+                <input type="text" id="key" placeholder="Schlüssel eingeben">
+            `;
+        default:
+            return '';
+    }
+}
+
+(window as any).encryptText = function(method: string) {
+    const inputText = (document.getElementById('input-text') as HTMLTextAreaElement)?.value;
+    if (!inputText) return;
+
+    let result = '';
+    switch (method) {
+        case 'Caesar Verschlüsselung':
+            const shift = parseInt((document.getElementById('shift') as HTMLInputElement)?.value || '3');
+            result = caesarEncrypt(inputText, shift);
+            break;
+        case 'Vigenère Verschlüsselung':
+            const vigenereKey = (document.getElementById('key') as HTMLInputElement)?.value;
+            if (vigenereKey) {
+                result = vigenereEncrypt(inputText, vigenereKey);
+            }
+            break;
+        case 'XOR Verschlüsselung':
+            const xorKey = (document.getElementById('key') as HTMLInputElement)?.value;
+            if (xorKey) {
+                result = xorEncrypt(inputText, xorKey);
+            }
+            break;
+        // Weitere Verschlüsselungsmethoden hier hinzufügen
+    }
+
+    const resultElement = document.getElementById('result');
+    if (resultElement) {
+        resultElement.innerHTML = `
+            <h4>Verschlüsselter Text:</h4>
+            <div class="result-text">${result}</div>
+        `;
+    }
+};
+
+(window as any).decryptText = function(method: string) {
+    const inputText = (document.getElementById('input-text') as HTMLTextAreaElement)?.value;
+    if (!inputText) return;
+
+    let result = '';
+    switch (method) {
+        case 'Caesar Verschlüsselung':
+            const shift = parseInt((document.getElementById('shift') as HTMLInputElement)?.value || '3');
+            result = caesarDecrypt(inputText, shift);
+            break;
+        case 'Vigenère Verschlüsselung':
+            const vigenereKey = (document.getElementById('key') as HTMLInputElement)?.value;
+            if (vigenereKey) {
+                result = vigenereDecrypt(inputText, vigenereKey);
+            }
+            break;
+        case 'XOR Verschlüsselung':
+            const xorKey = (document.getElementById('key') as HTMLInputElement)?.value;
+            if (xorKey) {
+                result = xorEncrypt(inputText, xorKey); // XOR ist symmetrisch
+            }
+            break;
+        // Weitere Verschlüsselungsmethoden hier hinzufügen
+    }
+
+    const resultElement = document.getElementById('result');
+    if (resultElement) {
+        resultElement.innerHTML = `
+            <h4>Entschlüsselter Text:</h4>
+            <div class="result-text">${result}</div>
+        `;
+    }
+};
+
+function xorEncrypt(text: string, key: string): string {
+    let result = '';
+    for (let i = 0; i < text.length; i++) {
+        result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    }
+    return result;
 }

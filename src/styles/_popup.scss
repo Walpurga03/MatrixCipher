@@ -1,81 +1,400 @@
 /* popup.scss */
-.popup {
-  background-color: rgba(0, 0, 0, 1);
-  border: 2px solid var(--primary-color);
-  border-radius: 10px;
-  padding: 20px;
-  color: var(--primary-color);
-  font-family: var(--font-family);
-  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 200;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 60vw;
-  @media (max-width: #{$breakpoint-sm}) { /* 768px */
-    width: 80vw;
-  }
+// Matrix Theme Colors
+$matrix-green: #00ff00;
+$matrix-dark: #000;
+$matrix-light: #33ff33;
+$matrix-glow: rgba(0, 255, 0, 0.5);
+$matrix-overlay: rgba(0, 0, 0, 0.85);
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $matrix-overlay;
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
 }
 
-.popup h3 {
-  margin-bottom: 20px;
-}
-.popup a {
- color: aqua;
+.cipher-popup {
+    background: rgba(0, 10, 2, 0.95);
+    border: 2px solid $matrix-green;
+    border-radius: 8px;
+    padding: 25px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 0 20px $matrix-glow,
+                inset 0 0 15px rgba(0, 255, 0, 0.2);
+    animation: slideIn 0.4s ease-out;
+    margin: 20px;
+
+    .close-button {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        border: none;
+        color: $matrix-green;
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 5px;
+        line-height: 1;
+        transition: all 0.3s ease;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        z-index: 1010;
+        
+        &:hover {
+            color: $matrix-light;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px $matrix-glow;
+            background: rgba(0, 255, 0, 0.1);
+        }
+    }
+
+    .info-button {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: transparent;
+        border: none;
+        color: $matrix-green;
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 5px;
+        line-height: 1;
+        transition: all 0.3s ease;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        z-index: 1010;
+        
+        &:hover {
+            color: $matrix-light;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px $matrix-glow;
+            background: rgba(0, 255, 0, 0.1);
+        }
+    }
+
+    h3 {
+        color: $matrix-light;
+        text-align: center;
+        margin: 0 0 20px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 1.5em;
+        text-shadow: 0 0 10px $matrix-glow;
+        letter-spacing: 2px;
+        position: relative;
+        
+        &::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                $matrix-green,
+                transparent
+            );
+            margin-top: 10px;
+        }
+    }
+
+    .input-group {
+        margin: 20px auto;
+        max-width: 90%;
+        
+        label {
+            display: block;
+            color: $matrix-light;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 5px $matrix-glow;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 20, 0, 0.3);
+            border: 1px solid $matrix-green;
+            border-radius: 4px;
+            color: $matrix-green;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            transition: all 0.3s ease;
+            
+            &:focus {
+                outline: none;
+                border-color: $matrix-light;
+                box-shadow: 0 0 15px $matrix-glow;
+                background: rgba(0, 20, 0, 0.5);
+            }
+        }
+        
+        textarea {
+            min-height: 120px;
+            line-height: 1.4;
+        }
+        
+        input[type="number"] {
+            width: 100px;
+            text-align: center;
+            -moz-appearance: textfield;
+            margin: 0 auto;
+            display: block;
+            
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        }
+    }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin: 25px auto;
+        max-width: 90%;
+        
+        button {
+            padding: 12px 25px;
+            background: transparent;
+            border: 1px solid $matrix-green;
+            color: $matrix-green;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+            
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(0, 255, 0, 0.2),
+                    transparent
+                );
+                transition: 0.5s;
+            }
+            
+            &:hover {
+                background: rgba(0, 255, 0, 0.1);
+                border-color: $matrix-light;
+                color: $matrix-light;
+                box-shadow: 0 0 15px $matrix-glow;
+                
+                &::before {
+                    left: 100%;
+                }
+            }
+            
+            &:active {
+                transform: scale(0.98);
+            }
+        }
+    }
+
+    .result {
+        margin: 25px auto;
+        padding: 15px;
+        border: 1px solid $matrix-green;
+        border-radius: 4px;
+        background: rgba(0, 20, 0, 0.3);
+        display: none;
+        animation: fadeIn 0.3s ease-out;
+        max-width: 90%;
+        
+        &.show {
+            display: block;
+        }
+        
+        h4 {
+            color: $matrix-light;
+            margin: 0 0 10px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 5px $matrix-glow;
+        }
+        
+        .result-text {
+            color: $matrix-green;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            word-break: break-all;
+            text-shadow: 0 0 2px $matrix-glow;
+        }
+    }
+
+    .popup-header {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        display: flex;
+        gap: 10px;
+        z-index: 1010;
+    }
 }
 
-.popup label {
-  display: block;
-  margin-bottom: 5px;
-  text-align: left;
-  font-weight: bold;
-  width: 100%;
+.info-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(3px);
+    z-index: 1100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
 }
 
-.popup input[type="text"],
-.popup input[type="number"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid var(--primary-color);
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--primary-color);
+.info-popup {
+    background: rgba(0, 10, 2, 0.98);
+    border: 2px solid $matrix-green;
+    border-radius: 8px;
+    padding: 25px;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 0 20px $matrix-glow;
+    animation: slideIn 0.4s ease-out;
+
+    .close-info-button {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        border: none;
+        color: $matrix-green;
+        font-size: 1.5em;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        
+        &:hover {
+            color: $matrix-light;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px $matrix-glow;
+            background: rgba(0, 255, 0, 0.1);
+        }
+    }
+
+    .info-content {
+        color: $matrix-green;
+        font-family: 'Courier New', monospace;
+
+        h4 {
+            color: $matrix-light;
+            margin: 0 0 20px 0;
+            text-align: center;
+            font-size: 1.4em;
+            text-shadow: 0 0 5px $matrix-glow;
+        }
+
+        .info-text {
+            p {
+                margin: 12px 0;
+                line-height: 1.6;
+                text-shadow: 0 0 2px $matrix-glow;
+            }
+
+            ul {
+                margin: 12px 0;
+                padding-left: 20px;
+                
+                li {
+                    margin: 8px 0;
+                    line-height: 1.4;
+                    text-shadow: 0 0 2px $matrix-glow;
+                    
+                    &::marker {
+                        color: $matrix-light;
+                    }
+                }
+            }
+
+            .example {
+                margin: 15px 0;
+                padding: 15px;
+                border: 1px solid $matrix-green;
+                border-radius: 4px;
+                background: rgba(0, 255, 0, 0.05);
+
+                p {
+                    margin: 5px 0;
+                    font-family: 'Courier New', monospace;
+                    letter-spacing: 1px;
+                }
+            }
+        }
+    }
 }
 
-.popup button {
-  background-color: var(--primary-color);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  color: var(--background-color);
-  transition: background-color 0.3s ease;
+// Animations
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-.popup button:hover {
-  background-color: var(--secondary-color);
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
-.popup .button-container {
-  display: flex;
-  gap: 10px; /* Abstand zwischen den Buttons */
-}
-
-.popup textarea {
-  width: 100%;
-  height: 200px; /* Höhe anpassen, um mehr Platz zu schaffen */
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid var(--primary-color);
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--primary-color);
-  resize: vertical; /* Ermöglicht das manuelle Anpassen der Höhe */
+// Responsive Design
+@media (max-width: 768px) {
+    .cipher-popup {
+        width: 95%;
+        padding: 20px;
+        margin: 10px;
+        
+        .button-group {
+            flex-direction: column;
+            
+            button {
+                width: 100%;
+            }
+        }
+    }
 }

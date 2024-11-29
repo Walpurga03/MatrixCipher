@@ -1,0 +1,483 @@
+// Matrix Theme Colors
+$matrix-green: #00ff00;
+$matrix-dark: #000;
+$matrix-light: #33ff33;
+$matrix-glow: rgba(0, 255, 0, 0.5);
+$matrix-overlay: rgba(0, 0, 0, 0.85);
+
+.caesar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $matrix-overlay;
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.caesar-popup {
+    background: rgba(0, 10, 2, 0.98);
+    border: 2px solid $matrix-green;
+    border-radius: 8px;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 0 20px $matrix-glow,
+                inset 0 0 15px rgba(0, 255, 0, 0.2);
+    animation: slideIn 0.4s ease-out;
+
+    &.info-active {
+        opacity: 0.3;
+        pointer-events: none;
+        filter: blur(2px);
+    }
+
+    // Header
+    .caesar-header {
+        text-align: center;
+        margin-bottom: 30px;
+        
+        h3 {
+            color: $matrix-light;
+            font-size: 2em;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 10px $matrix-glow;
+            margin: 0;
+            letter-spacing: 3px;
+            position: relative;
+            
+            &::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, $matrix-green, transparent);
+                margin-top: 15px;
+            }
+        }
+    }
+
+    // Input Section
+    .caesar-input {
+        margin: 20px 0;
+        
+        label {
+            display: block;
+            color: $matrix-light;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-shadow: 0 0 5px $matrix-glow;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            background: rgba(0, 20, 0, 0.3);
+            border: 1px solid $matrix-green;
+            border-radius: 4px;
+            color: $matrix-green;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            resize: vertical;
+            transition: all 0.3s ease;
+            
+            &:focus {
+                outline: none;
+                border-color: $matrix-light;
+                box-shadow: 0 0 15px $matrix-glow;
+                background: rgba(0, 20, 0, 0.5);
+            }
+        }
+    }
+
+    // Shift Control
+    .caesar-shift {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 30px 0;
+        
+        .shift-label {
+            color: $matrix-light;
+            font-family: 'Courier New', monospace;
+            margin-right: 15px;
+            font-size: 1.1em;
+            text-shadow: 0 0 5px $matrix-glow;
+        }
+        
+        .shift-control {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 20, 0, 0.3);
+            border: 1px solid $matrix-green;
+            border-radius: 4px;
+            padding: 5px;
+            
+            button {
+                background: transparent;
+                border: none;
+                color: $matrix-green;
+                font-size: 1.5em;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                
+                &:hover {
+                    color: $matrix-light;
+                    text-shadow: 0 0 10px $matrix-glow;
+                }
+            }
+            
+            input {
+                width: 60px;
+                text-align: center;
+                background: transparent;
+                border: none;
+                color: $matrix-green;
+                font-family: 'Courier New', monospace;
+                font-size: 1.2em;
+                padding: 5px;
+                
+                // Entferne Standard-Spinner für alle Browser
+                appearance: textfield;
+                
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
+                    appearance: none;
+                    margin: 0;
+                }
+                
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+
+    // Action Buttons
+    .caesar-actions {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin: 30px 0;
+        
+        button {
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid $matrix-green;
+            color: $matrix-green;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 150px;
+            
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(0, 255, 0, 0.2),
+                    transparent
+                );
+                transition: 0.5s;
+            }
+            
+            &:hover {
+                background: rgba(0, 255, 0, 0.1);
+                border-color: $matrix-light;
+                color: $matrix-light;
+                box-shadow: 0 0 15px $matrix-glow;
+                
+                &::before {
+                    left: 100%;
+                }
+            }
+            
+            &:active {
+                transform: scale(0.98);
+            }
+        }
+    }
+
+    // Result Section
+    .caesar-result {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid $matrix-green;
+        border-radius: 4px;
+        background: rgba(0, 20, 0, 0.3);
+        display: none;
+        animation: fadeIn 0.3s ease-out;
+        
+        &.show {
+            display: block;
+        }
+        
+        h4 {
+            color: $matrix-light;
+            margin: 0 0 15px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 5px $matrix-glow;
+        }
+        
+        .result-text {
+            color: $matrix-green;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            line-height: 1.5;
+            word-break: break-all;
+            text-shadow: 0 0 2px $matrix-glow;
+        }
+    }
+
+    // Control Buttons
+    .caesar-controls {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+        
+        button {
+            background: transparent;
+            border: none;
+            color: $matrix-green;
+            font-size: 1.5em;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            border-radius: 0;
+            
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                transition: all 0.3s ease;
+            }
+            
+            &:hover {
+                color: $matrix-light;
+                transform: scale(1.1);
+                text-shadow: 0 0 10px $matrix-glow;
+                
+                &::before {
+                    border-color: $matrix-green;
+                    box-shadow: 0 0 10px $matrix-glow;
+                }
+            }
+        }
+        
+        .info-button {
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-top: none;
+            border-left: none;
+            border-bottom-right-radius: 8px;
+            
+            &:hover {
+                background: rgba(0, 255, 0, 0.2);
+                border-color: $matrix-green;
+            }
+        }
+        
+        .close-button {
+            margin: 0;
+            padding: 0;
+            font-size: 1.8em;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-top: none;
+            border-right: none;
+            border-bottom-left-radius: 8px;
+            color: #ff3333;
+            
+            &:hover {
+                background: rgba(255, 0, 0, 0.2);
+                border-color: #ff5555;
+                color: #ff5555;
+                text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            }
+        }
+    }
+}
+
+// Info Popup
+.caesar-info {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1100;
+    background: rgba(0, 10, 2, 0.98);
+    border: 2px solid $matrix-green;
+    border-radius: 8px;
+    padding: 25px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 0 20px $matrix-glow;
+    animation: fadeIn 0.3s ease-out;
+
+    &::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: -1;
+        backdrop-filter: blur(3px);
+    }
+
+    h4 {
+        color: $matrix-light;
+        margin: 0 0 20px 0;
+        text-align: center;
+        font-size: 1.4em;
+        font-family: 'Courier New', monospace;
+        text-shadow: 0 0 5px $matrix-glow;
+    }
+
+    .info-content {
+        color: $matrix-green;
+        font-family: 'Courier New', monospace;
+        position: relative;
+        z-index: 1;
+
+        p {
+            margin: 12px 0;
+            line-height: 1.6;
+            text-shadow: 0 0 2px $matrix-glow;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 20px;
+            
+            li {
+                margin: 8px 0;
+                line-height: 1.4;
+                text-shadow: 0 0 2px $matrix-glow;
+                
+                &::marker {
+                    color: $matrix-light;
+                }
+            }
+        }
+
+        .example {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid $matrix-green;
+            border-radius: 4px;
+            background: rgba(0, 255, 0, 0.05);
+
+            p {
+                margin: 5px 0;
+                font-family: 'Courier New', monospace;
+                letter-spacing: 1px;
+            }
+        }
+    }
+
+    .close-info {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        border: none;
+        color: $matrix-green;
+        font-size: 1.5em;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        
+        &:hover {
+            color: $matrix-light;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px $matrix-glow;
+            background: rgba(0, 255, 0, 0.1);
+        }
+    }
+}
+
+// Animations
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .caesar-popup {
+        padding: 20px;
+        margin: 15px;
+        
+        .caesar-actions {
+            flex-direction: column;
+            
+            button {
+                width: 100%;
+            }
+        }
+        
+        .caesar-shift {
+            flex-direction: column;
+            gap: 10px;
+            
+            .shift-label {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+        }
+    }
+}
