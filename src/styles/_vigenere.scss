@@ -1,0 +1,288 @@
+// Matrix Theme Colors (gleich wie bei Caesar)
+$matrix-green: #00ff00;
+$matrix-dark: #000;
+$matrix-light: #33ff33;
+$matrix-glow: rgba(0, 255, 0, 0.5);
+$matrix-overlay: rgba(0, 0, 0, 0.85);
+
+.vigenere-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $matrix-overlay;
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.vigenere-popup {
+    background: rgba(0, 10, 2, 0.98);
+    border: 2px solid $matrix-green;
+    border-radius: 8px;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 0 20px $matrix-glow,
+                inset 0 0 15px rgba(0, 255, 0, 0.2);
+    animation: slideIn 0.4s ease-out;
+
+    &.info-active {
+        opacity: 0.1;
+        pointer-events: none;
+        filter: blur(4px);
+    }
+
+    // Header
+    .vigenere-header {
+        text-align: center;
+        margin-bottom: 30px;
+        
+        h3 {
+            color: $matrix-light;
+            font-size: 2em;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 10px $matrix-glow;
+            margin: 0;
+            letter-spacing: 3px;
+            position: relative;
+            
+            &::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, $matrix-green, transparent);
+                margin-top: 15px;
+            }
+        }
+    }
+
+    // Input Sections
+    .vigenere-input {
+        margin: 20px 0;
+        
+        label {
+            display: block;
+            color: $matrix-light;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-shadow: 0 0 5px $matrix-glow;
+        }
+        
+        textarea, input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 20, 0, 0.3);
+            border: 1px solid $matrix-green;
+            border-radius: 4px;
+            color: $matrix-green;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            
+            &:focus {
+                outline: none;
+                border-color: $matrix-light;
+                box-shadow: 0 0 15px $matrix-glow;
+                background: rgba(0, 20, 0, 0.5);
+            }
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input {
+            height: 50px;
+        }
+    }
+
+    // Controls
+    .vigenere-controls {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+
+        button {
+            background: none;
+            border: none;
+            color: $matrix-green;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                color: $matrix-light;
+                text-shadow: 0 0 10px $matrix-glow;
+            }
+
+            &.info-button {
+                font-size: 1.2em;
+                margin-right: auto;
+            }
+
+            &.close-button {
+                margin-left: auto;
+            }
+        }
+    }
+
+    // Actions
+    .vigenere-actions {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin: 30px 0;
+
+        button {
+            background: rgba(0, 20, 0, 0.6);
+            border: 1px solid $matrix-green;
+            color: $matrix-green;
+            padding: 12px 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+
+            &:hover {
+                background: rgba(0, 40, 0, 0.8);
+                color: $matrix-light;
+                border-color: $matrix-light;
+                box-shadow: 0 0 15px $matrix-glow;
+            }
+        }
+    }
+
+    // Result
+    .vigenere-result {
+        margin-top: 30px;
+        padding: 20px;
+        background: rgba(0, 20, 0, 0.2);
+        border-radius: 4px;
+        
+        h4 {
+            color: $matrix-light;
+            margin: 0 0 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            text-shadow: 0 0 5px $matrix-glow;
+        }
+        
+        .result-text {
+            color: $matrix-green;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            word-break: break-all;
+        }
+    }
+}
+
+// Info Popup
+.vigenere-info {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 10, 2, 0.98);
+    border: 2px solid $matrix-green;
+    border-radius: 8px;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    z-index: 1100;
+    box-shadow: 0 0 20px $matrix-glow;
+    animation: fadeIn 0.3s ease-out;
+
+    h4 {
+        color: $matrix-light;
+        margin: 0 0 20px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 1.5em;
+        text-shadow: 0 0 10px $matrix-glow;
+        text-align: center;
+    }
+
+    .info-content {
+        color: $matrix-green;
+        font-family: 'Courier New', monospace;
+        line-height: 1.6;
+
+        p {
+            margin: 15px 0;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 20px;
+
+            li {
+                margin: 8px 0;
+            }
+        }
+
+        .example {
+            background: rgba(0, 20, 0, 0.3);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+
+            p {
+                margin: 8px 0;
+            }
+        }
+    }
+
+    .close-info {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: $matrix-green;
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 5px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            color: $matrix-light;
+            text-shadow: 0 0 10px $matrix-glow;
+        }
+    }
+}
+
+// Animations
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

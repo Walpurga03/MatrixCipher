@@ -2,6 +2,11 @@
 const canvas = document.getElementById('matrixCanvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
 
+if (!ctx) {
+    console.error('Could not get canvas context');
+    throw new Error('Canvas context not available');
+}
+
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 
