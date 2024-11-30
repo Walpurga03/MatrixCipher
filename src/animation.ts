@@ -1,63 +1,32 @@
-function startTextAnimation() {
-    const messageElement = document.getElementById('message')!;
-    const textPhrases = [
-        "Wake up, Neo...",
-        "The Matrix has you...",
-        "Follow the white rabbit...",
-        "Knock, knock, Neo..."
-    ];
-    let phraseIndex = 0;
-    let cursorBlinkCount = 0;
+// Matrix Rain Animation
+const canvas = document.getElementById('matrixCanvas') as HTMLCanvasElement;
+const ctx = canvas.getContext('2d');
 
-    function blinkCursor(times: number, callback: () => void) {
-        function blink() {
-            if (cursorBlinkCount < times * 2) { // times * 2 because we count both on and off states
-                const cursorElement = document.getElementById('cursor')!;
-                cursorElement.style.visibility = cursorBlinkCount % 2 === 0 ? 'visible' : 'hidden';
-                cursorBlinkCount++;
-                setTimeout(blink, 500);
-            } else {
-                callback(); // Start the text animation after blinking
-            }
-        }
-        blink();
-    }
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 
-    function typeNextPhrase() {
-        if (phraseIndex < textPhrases.length) {
-            const text = textPhrases[phraseIndex];
-            let letterIndex = 0;
+const cols = Math.floor(width / 20);
+const ypos = Array(cols).fill(0);
 
-            function typeNextLetter() {
-                if (letterIndex < text.length) {
-                    messageElement.innerHTML = text.substring(0, letterIndex + 1) + `<span id="cursor"></span>`;
-                    letterIndex++;
-                    setTimeout(typeNextLetter, 100);
-                } else {
-                    phraseIndex++;
-                    setTimeout(typeNextPhrase, 1000);
-                }
-            }
+const matrix = () => {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, width, height);
 
-            messageElement.innerHTML = ""; // Clear the message element before typing
-            typeNextLetter();
-        } else {
-            setTimeout(showMenu, 1000); // Show menu after text is fully displayed
-        }
-    }
+    ctx.fillStyle = '#0F0';
+    ctx.font = '15pt monospace';
 
-     function showMenu() {
-        messageElement.style.display = "none"; // Hide the message
-        const menuElement = document.getElementById('menu') as HTMLElement;
-        if (menuElement) {
-            menuElement.style.display = "block"; // Show the menu
-        } else {
-            console.error('Menu element not found');
-        }
-    }
+    ypos.forEach((y, ind) => {
+        const text = String.fromCharCode(Math.random() * 128);
+        const x = ind * 20;
+        ctx.fillText(text, x, y);
+        if (y > 100 + Math.random() * 10000) ypos[ind] = 0;
+        else ypos[ind] = y + 20;
+    });
+};
 
-    messageElement.innerHTML = `<span id="cursor"></span>`; // Display the cursor first
-    blinkCursor(5, typeNextPhrase); // Blink 5 times, then start typing
-}
+window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+});
 
-export default startTextAnimation;
+setInterval(matrix, 50);

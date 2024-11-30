@@ -9,21 +9,46 @@
 <body>
     <canvas id="matrixCanvas"></canvas>
     <div id="computer-container">
-        <div id="computer-screen">
-            <div id="text-container">
-                <div id="message"></div>
-                <div id="menu" style="display: none;">
-                    <h3>Wähle eine Verschlüsselungsmethode:</h3>
-                    <ul>
-                        <li onclick="selectMethod('Caesar Cipher')" data-tooltip="Verschiebe jeden Buchstaben um einen festen Wert">Caesar-Verschlüsselung</li>
-                        <li onclick="selectMethod('Vigenère Cipher')" data-tooltip="Encrypt with a repeating key">Vigenère Cipher</li>
-                        <li onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">XOR</li>
-                        <li onclick="selectMethod('Blowfish')" data-tooltip="Symmetric block cipher">Blowfish</li>
-                        <li onclick="selectMethod('SHA-256')" data-tooltip="Secure hash algorithm, 256-bit">SHA-256</li>
-                        <li onclick="selectMethod('RIPEMD-160')" data-tooltip="160-bit cryptographic hash function">RIPEMD-160</li>
-                        <li onclick="selectMethod('AES')" data-tooltip="Advanced Encryption Standard">AES</li>
-                        <li onclick="selectMethod('RSA')" data-tooltip="Asymmetric encryption using public and private keys">RSA</li>
-                    </ul>
+        <div id="main-container">
+            <div id="tooltip-window"></div>
+            <div id="computer-screen" style="display: none;">
+                <div id="terminal-window" style="display: none;">
+                    <div class="message-line">
+                        <span id="message-text"></span><span id="cursor">_</span>
+                    </div>
+                </div>
+                <div id="text-container">
+                    <div id="message"></div>
+                    <div id="tooltip-container"></div>
+                    <div id="menu" style="display: none;">
+                        <h3>WÄHLE EINE VERSCHLÜSSELUNGSMETHODE:</h3>
+                        <div class="button-grid">
+                            <button class="menu-button" onclick="selectMethod('Caesar Cipher')" data-tooltip="Verschiebe jeden Buchstaben um einen festen Wert">
+                                Caesar
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('Vigenère Cipher')" data-tooltip="Encrypt with a repeating key">
+                                Vigenère
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">
+                                XOR
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('Blowfish')" data-tooltip="Symmetric block cipher">
+                                Blowfish
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('SHA-256')" data-tooltip="Secure hash algorithm, 256-bit">
+                                SHA-256
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('RIPEMD-160')" data-tooltip="160-bit cryptographic hash function">
+                                RIPEMD-160
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('AES')" data-tooltip="Advanced Encryption Standard">
+                                AES
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('RSA')" data-tooltip="Asymmetric encryption using public and private keys">
+                                RSA
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -33,16 +58,95 @@
     <div id="input-bar" style="display: none;"></div>
     <script src="https://embed.twentyuno.net/js/app.js"></script>
 
-
     <script type="module">
-        import startTextAnimation from '/src/animation.ts';
         import startMatrixAnimation from '/src/matrix_rain.ts';
         import { selectMethod } from '/src/encryption/encryptions.ts';
 
-        startTextAnimation();
         startMatrixAnimation('matrixCanvas');
 
         window.selectMethod = selectMethod; // Exportiert die selectMethod-Funktion für das HTML
+    </script>
+    <script>
+        const messages = [
+            "Wake up, Neo...",
+            "The Matrix has you...",
+            "Follow the white rabbit...",
+            "Knock, knock, Neo..."
+        ];
+
+        async function blinkCursor(times) {
+            const cursor = document.getElementById('cursor');
+            for (let i = 0; i < times * 2; i++) {
+                cursor.style.opacity = i % 2 === 0 ? '0' : '1';
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            cursor.style.opacity = '1';
+        }
+
+        async function typeMessage(message, element, speed = 100) {
+            for (let i = 0; i < message.length; i++) {
+                element.textContent += message[i];
+                await new Promise(resolve => setTimeout(resolve, speed));
+            }
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        async function deleteMessage(element, speed = 50) {
+            let message = element.textContent;
+            while (message.length > 0) {
+                message = message.slice(0, -1);
+                element.textContent = message;
+                await new Promise(resolve => setTimeout(resolve, speed));
+            }
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        async function showMatrixMessages() {
+            const computerScreen = document.getElementById('computer-screen');
+            const terminal = document.getElementById('terminal-window');
+            const messageElement = document.getElementById('message-text');
+            const menu = document.getElementById('menu');
+            
+            // Computer-Screen einblenden
+            computerScreen.style.display = 'flex';
+            
+            // Zeige Terminal
+            terminal.style.display = 'flex';
+
+            // Cursor 5 mal blinken lassen
+            await blinkCursor(5);
+            
+            // Zeige Nachrichten
+            for (const message of messages) {
+                await typeMessage(message, messageElement);
+                await deleteMessage(messageElement);
+            }
+            
+            // Verstecke Terminal
+            terminal.style.display = 'none';
+            
+            // Zeige Menü
+            menu.style.display = 'block';
+            computerScreen.classList.add('menu-visible');
+        }
+
+        // Starte die Sequenz nach einer kurzen Verzögerung
+        setTimeout(showMatrixMessages, 2000);
+
+        const tooltipWindow = document.getElementById('tooltip-window');
+        
+        document.querySelectorAll('.menu-button').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                tooltipWindow.textContent = button.getAttribute('data-tooltip');
+                tooltipWindow.style.opacity = '1';
+                tooltipWindow.style.visibility = 'visible';
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                tooltipWindow.style.opacity = '0';
+                tooltipWindow.style.visibility = 'hidden';
+            });
+        });
     </script>
 </body>
 </html>
