@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/MatrixCipher/', // Passe diesen Pfad an, falls nötig
+  base: '/MatrixCipher/',
   // Weitere Konfigurationen
-});
+})

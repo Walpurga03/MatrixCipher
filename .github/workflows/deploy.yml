@@ -16,25 +16,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm install -g typescript
-          npm install -g sass
+        run: npm ci
 
-      - name: Build TypeScript
-        run: tsc
-
-      - name: Build SASS
-        run: sass src/styles/style.scss dist/css/style.css
-
-      - name: Copy static files
-        run: |
-          mkdir -p dist
-          cp index.html dist/
-          cp -r src/assets dist/
-          cp -r src/fonts dist/
+      - name: Build
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
