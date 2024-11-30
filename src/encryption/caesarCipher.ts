@@ -13,8 +13,8 @@ export function showCaesarCipherPopup() {
     // Popup Inhalt
     popup.innerHTML = `
         <div class="caesar-controls">
-            <button class="info-button" onclick="showCaesarInfo()">ℹ</button>
-            <button class="close-button" onclick="closeCaesarPopup()">&times;</button>
+            <button class="info-button" title="Info zur Caesar-Verschlüsselung" onclick="showCaesarInfo()">ℹ</button>
+            <button class="close-button" title="Schließen" onclick="closeCaesarPopup()">&times;</button>
         </div>
         
         <div class="caesar-header">

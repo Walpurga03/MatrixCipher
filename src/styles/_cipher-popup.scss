@@ -1,0 +1,237 @@
+@use 'variables' as v;
+@forward 'cipher-popup-layout';
+
+// Gemeinsame Animationen
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes infoPopupIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+// Mixin für das Basis-Popup-Layout
+@mixin cipher-popup-layout {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: v.$matrix-overlay;
+    backdrop-filter: blur(3px);
+    z-index: v.$z-overlay;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+// Mixin für den Popup-Container
+@mixin cipher-popup-container {
+    & {
+        position: relative;
+        background: v.$matrix-background;
+        border: v.$matrix-border;
+        border-radius: v.$matrix-border-radius;
+        padding: v.$matrix-padding;
+        width: 85%;
+        max-width: 600px;
+        box-shadow: v.$matrix-box-shadow,
+                    v.$matrix-inset-shadow;
+        animation: slideIn 0.4s ease-out;
+    }
+
+    &.info-active {
+        opacity: 0.1;
+        pointer-events: none;
+        filter: blur(4px);
+    }
+}
+
+// Mixin für die Steuerelemente (i und x Buttons)
+@mixin cipher-controls {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: v.$z-controls;
+
+    button {
+        background: none;
+        border: none;
+        color: v.$matrix-green;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.3s ease;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: v.$matrix-font-size-small;
+        font-weight: bold;
+        background: v.$matrix-hover-bg;
+        border: 1px solid v.$matrix-border-hover;
+
+        &:hover {
+            background: v.$matrix-active-bg;
+            border-color: v.$matrix-green;
+        }
+
+        &.info-button {
+            border-top: none;
+            border-left: none;
+            border-bottom-right-radius: v.$matrix-border-radius;
+        }
+
+        &.close-button {
+            border-top: none;
+            border-right: none;
+            border-bottom-left-radius: v.$matrix-border-radius;
+        }
+    }
+}
+
+// Mixin für die Aktions-Buttons (Verschlüsseln/Entschlüsseln)
+@mixin cipher-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: v.$matrix-gap;
+    margin-top: calc(v.$matrix-margin * 2);
+
+    button {
+        flex: 1;
+        background: transparent;
+        border: v.$matrix-border;
+        color: v.$matrix-green;
+        padding: calc(v.$matrix-padding / 2.5) v.$matrix-padding;
+        font-family: v.$matrix-font-family;
+        font-size: v.$matrix-font-size-small;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: calc(v.$matrix-border-radius / 2);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        
+        &:hover {
+            background: v.$matrix-hover-bg;
+            border-color: v.$matrix-light;
+            color: v.$matrix-light;
+            box-shadow: v.$matrix-box-shadow;
+        }
+        
+        &:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 5px v.$matrix-glow;
+        }
+    }
+}
+
+// Mixin für das Info-Popup
+@mixin cipher-info-popup {
+    & {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: v.$matrix-background;
+        border: v.$matrix-border;
+        border-radius: v.$matrix-border-radius;
+        padding: v.$matrix-padding;
+        width: 90%;
+        max-width: 600px;
+        z-index: v.$z-popup;
+        box-shadow: v.$matrix-box-shadow;
+        animation: infoPopupIn 0.4s ease-out;
+    }
+
+    h4 {
+        color: v.$matrix-light;
+        font-size: v.$matrix-font-size-medium;
+        font-family: v.$matrix-font-family;
+        margin: 0 0 v.$matrix-margin 0;
+        text-shadow: v.$matrix-text-shadow;
+    }
+
+    .info-content {
+        color: v.$matrix-green;
+        font-family: v.$matrix-font-family;
+
+        p {
+            margin: v.$matrix-margin 0;
+            line-height: 1.5;
+        }
+
+        ul {
+            margin: v.$matrix-margin 0;
+            padding-left: v.$matrix-margin;
+
+            li {
+                margin: calc(v.$matrix-margin / 2) 0;
+                line-height: 1.5;
+            }
+        }
+
+        .example {
+            background: v.$matrix-hover-bg;
+            border: 1px solid v.$matrix-green;
+            padding: calc(v.$matrix-padding / 2);
+            margin-top: v.$matrix-margin;
+            border-radius: calc(v.$matrix-border-radius / 2);
+
+            p {
+                margin: 5px 0;
+                font-family: v.$matrix-font-family;
+                letter-spacing: 1px;
+            }
+        }
+    }
+
+    .close-info {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: v.$matrix-hover-bg;
+        border: 1px solid v.$matrix-border-hover;
+        border-top: none;
+        border-right: none;
+        border-bottom-left-radius: v.$matrix-border-radius;
+        color: v.$matrix-green;
+        font-size: v.$matrix-font-size-small;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: v.$matrix-active-bg;
+            border-color: v.$matrix-green;
+        }
+    }
+}

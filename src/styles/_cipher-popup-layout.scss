@@ -1,0 +1,121 @@
+@use 'variables' as v;
+
+@mixin cipher-popup-layout {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin cipher-popup-container {
+    background: v.$matrix-background;
+    border: v.$matrix-border;
+    border-radius: v.$matrix-border-radius;
+    box-shadow: v.$matrix-box-shadow;
+    padding: v.$matrix-padding;
+}
+
+@mixin cipher-controls {
+    position: absolute;
+    top: v.$matrix-margin;
+    right: v.$matrix-margin;
+    display: flex;
+    gap: v.$matrix-gap;
+    z-index: v.$z-controls;
+
+    button {
+        background: none;
+        border: none;
+        color: v.$matrix-green;
+        cursor: pointer;
+        padding: 0;
+        font-size: v.$matrix-font-size-medium;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: v.$matrix-light;
+        }
+    }
+}
+
+@mixin cipher-actions {
+    button {
+        background: v.$matrix-background;
+        border: v.$matrix-border;
+        color: v.$matrix-green;
+        padding: calc(v.$matrix-padding / 2) v.$matrix-padding;
+        font-family: v.$matrix-font-family;
+        font-size: v.$matrix-font-size-small;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: v.$letter-spacing;
+        min-width: 150px;
+
+        &:hover {
+            background: v.$matrix-hover-bg;
+            border-color: v.$matrix-light;
+            color: v.$matrix-light;
+            box-shadow: v.$matrix-box-shadow;
+        }
+
+        &:active {
+            background: v.$matrix-active-bg;
+            transform: translateY(1px);
+        }
+    }
+}
+
+@mixin cipher-info-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    background: v.$matrix-background;
+    border: v.$matrix-border;
+    border-radius: v.$matrix-border-radius;
+    padding: v.$matrix-padding;
+    max-width: 500px;
+    width: 90%;
+    z-index: v.$z-popup;
+    box-shadow: v.$matrix-box-shadow;
+    animation: infoPopupIn v.$animation-duration-medium ease-out forwards;
+
+    h3 {
+        color: v.$matrix-light;
+        font-size: v.$matrix-font-size-large;
+        margin: 0 0 v.$matrix-margin 0;
+        text-transform: uppercase;
+        letter-spacing: v.$letter-spacing;
+        text-align: center;
+    }
+
+    p {
+        color: v.$matrix-green;
+        font-size: v.$matrix-font-size-small;
+        line-height: v.$line-height;
+        margin: v.$matrix-margin 0;
+    }
+
+    .close-info {
+        position: absolute;
+        top: v.$matrix-margin;
+        right: v.$matrix-margin;
+        background: none;
+        border: none;
+        color: v.$matrix-green;
+        cursor: pointer;
+        padding: 0;
+        font-size: v.$matrix-font-size-medium;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: v.$matrix-light;
+        }
+    }
+}

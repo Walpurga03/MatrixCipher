@@ -14,8 +14,8 @@ export function showVigenereCipherPopup() {
     // Popup Inhalt
     popup.innerHTML = `
         <div class="vigenere-controls">
-            <button class="info-button" onclick="showVigenereInfo()">ℹ</button>
-            <button class="close-button" onclick="closeVigenerePopup()">&times;</button>
+            <button class="info-button" title="Info zur Vigenère-Verschlüsselung" onclick="showVigenereInfo()">ℹ</button>
+            <button class="close-button" title="Schließen" onclick="closeVigenerePopup()">&times;</button>
         </div>
         
         <div class="vigenere-header">

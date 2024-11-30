@@ -1,9 +1,6 @@
-// Matrix Theme Colors
-$matrix-green: #00ff00;
-$matrix-dark: #000;
-$matrix-light: #33ff33;
-$matrix-glow: rgba(0, 255, 0, 0.5);
-$matrix-overlay: rgba(0, 0, 0, 0.85);
+@use "sass:math";
+@use 'cipher-popup';
+@use 'variables' as v;
 
 .caesar-overlay {
     position: fixed;
@@ -11,246 +8,81 @@ $matrix-overlay: rgba(0, 0, 0, 0.85);
     left: 0;
     width: 100%;
     height: 100%;
-    background: $matrix-overlay;
-    backdrop-filter: blur(3px);
-    z-index: 1000;
+    background: v.$matrix-overlay;
+    backdrop-filter: blur(v.$blur-radius);
+    z-index: v.$z-overlay;
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn v.$animation-duration-short ease-out;
+    @include cipher-popup.cipher-popup-layout;
 }
 
 .caesar-popup {
-    background: rgba(0, 10, 2, 0.98);
-    border: 2px solid $matrix-green;
-    border-radius: 8px;
-    padding: 30px;
-    width: 90%;
-    max-width: 600px;
     position: relative;
-    box-shadow: 0 0 20px $matrix-glow,
-                inset 0 0 15px rgba(0, 255, 0, 0.2);
-    animation: slideIn 0.4s ease-out;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 20, 2, 0.95) 0%,
+        rgba(0, 10, 2, 0.98) 100%
+    );
+    border: v.$matrix-border;
+    border-radius: v.$matrix-border-radius;
+    padding: v.$matrix-padding;
+    width: v.$popup-width;
+    max-width: v.$max-popup-width;
+    box-shadow: v.$matrix-box-shadow,
+                v.$matrix-inset-shadow,
+                0 0 30px rgba(0, 255, 0, 0.1);
+    animation: slideIn v.$animation-duration-medium cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px);
+    @include cipher-popup.cipher-popup-container;
 
-    &.info-active {
-        opacity: 0.3;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: v.$matrix-border-radius;
+        background: linear-gradient(45deg, transparent, rgba(0, 255, 0, 0.1));
         pointer-events: none;
-        filter: blur(2px);
     }
 
-    // Header
     .caesar-header {
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: calc(v.$matrix-margin * 2);
+        position: relative;
         
         h3 {
-            color: $matrix-light;
-            font-size: 2em;
-            font-family: 'Courier New', monospace;
-            text-shadow: 0 0 10px $matrix-glow;
+            color: v.$matrix-light;
+            font-size: v.$matrix-font-size-large;
+            font-family: v.$matrix-font-family;
             margin: 0;
-            letter-spacing: 3px;
-            position: relative;
-            
-            &::after {
-                content: '';
-                display: block;
-                width: 100%;
-                height: 2px;
-                background: linear-gradient(90deg, transparent, $matrix-green, transparent);
-                margin-top: 15px;
-            }
+            text-transform: uppercase;
+            letter-spacing: v.$letter-spacing;
+            text-shadow: v.$matrix-text-shadow,
+                        0 0 20px rgba(51, 255, 51, 0.3);
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                v.$matrix-green,
+                transparent
+            );
         }
     }
 
-    // Input Section
-    .caesar-input {
-        margin: 20px 0;
-        
-        label {
-            display: block;
-            color: $matrix-light;
-            margin-bottom: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
-            text-shadow: 0 0 5px $matrix-glow;
-        }
-        
-        textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 15px;
-            background: rgba(0, 20, 0, 0.3);
-            border: 1px solid $matrix-green;
-            border-radius: 4px;
-            color: $matrix-green;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
-            resize: vertical;
-            transition: all 0.3s ease;
-            
-            &:focus {
-                outline: none;
-                border-color: $matrix-light;
-                box-shadow: 0 0 15px $matrix-glow;
-                background: rgba(0, 20, 0, 0.5);
-            }
-        }
-    }
-
-    // Shift Control
-    .caesar-shift {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 30px 0;
-        
-        .shift-label {
-            color: $matrix-light;
-            font-family: 'Courier New', monospace;
-            margin-right: 15px;
-            font-size: 1.1em;
-            text-shadow: 0 0 5px $matrix-glow;
-        }
-        
-        .shift-control {
-            display: flex;
-            align-items: center;
-            background: rgba(0, 20, 0, 0.3);
-            border: 1px solid $matrix-green;
-            border-radius: 4px;
-            padding: 5px;
-            
-            button {
-                background: transparent;
-                border: none;
-                color: $matrix-green;
-                font-size: 1.5em;
-                width: 30px;
-                height: 30px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s ease;
-                
-                &:hover {
-                    color: $matrix-light;
-                    text-shadow: 0 0 10px $matrix-glow;
-                }
-            }
-            
-            input {
-                width: 60px;
-                text-align: center;
-                background: transparent;
-                border: none;
-                color: $matrix-green;
-                font-family: 'Courier New', monospace;
-                font-size: 1.2em;
-                padding: 5px;
-                
-                // Entferne Standard-Spinner für alle Browser
-                appearance: textfield;
-                
-                &::-webkit-outer-spin-button,
-                &::-webkit-inner-spin-button {
-                    appearance: none;
-                    margin: 0;
-                }
-                
-                &:focus {
-                    outline: none;
-                }
-            }
-        }
-    }
-
-    // Action Buttons
-    .caesar-actions {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        margin: 30px 0;
-        
-        button {
-            padding: 12px 30px;
-            background: transparent;
-            border: 2px solid $matrix-green;
-            color: $matrix-green;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            min-width: 150px;
-            
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(0, 255, 0, 0.2),
-                    transparent
-                );
-                transition: 0.5s;
-            }
-            
-            &:hover {
-                background: rgba(0, 255, 0, 0.1);
-                border-color: $matrix-light;
-                color: $matrix-light;
-                box-shadow: 0 0 15px $matrix-glow;
-                
-                &::before {
-                    left: 100%;
-                }
-            }
-            
-            &:active {
-                transform: scale(0.98);
-            }
-        }
-    }
-
-    // Result Section
-    .caesar-result {
-        margin-top: 30px;
-        padding: 20px;
-        border: 1px solid $matrix-green;
-        border-radius: 4px;
-        background: rgba(0, 20, 0, 0.3);
-        display: none;
-        animation: fadeIn 0.3s ease-out;
-        
-        &.show {
-            display: block;
-        }
-        
-        h4 {
-            color: $matrix-light;
-            margin: 0 0 15px 0;
-            font-family: 'Courier New', monospace;
-            text-shadow: 0 0 5px $matrix-glow;
-        }
-        
-        .result-text {
-            color: $matrix-green;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
-            line-height: 1.5;
-            word-break: break-all;
-            text-shadow: 0 0 2px $matrix-glow;
-        }
-    }
-
-    // Control Buttons
     .caesar-controls {
         position: absolute;
         top: 0;
@@ -259,184 +91,183 @@ $matrix-overlay: rgba(0, 0, 0, 0.85);
         display: flex;
         justify-content: space-between;
         padding: 0;
-        
-        button {
-            background: transparent;
-            border: none;
-            color: $matrix-green;
-            font-size: 1.5em;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
+        @include cipher-popup.cipher-controls;
+    }
+
+    .caesar-content {
+        display: flex;
+        flex-direction: column;
+        gap: v.$matrix-gap;
+
+        label {
+            color: v.$matrix-green;
+            font-family: v.$matrix-font-family;
+            font-size: v.$matrix-font-size-small;
+            margin-bottom: calc(v.$matrix-margin / 3);
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: v.$matrix-light;
+            }
+        }
+
+        input, textarea {
+            background: rgba(0, 20, 2, 0.6);
+            border: 1px solid v.$matrix-green;
+            color: v.$matrix-light;
+            padding: calc(v.$matrix-padding / 2);
+            font-family: v.$matrix-font-family;
+            font-size: v.$matrix-font-size-small;
+            resize: vertical;
+            min-height: v.$min-input-height;
+            border-radius: calc(v.$matrix-border-radius / 2);
+            transition: all 0.3s ease;
+
+            &:focus {
+                outline: none;
+                border-color: v.$matrix-light;
+                box-shadow: v.$matrix-box-shadow,
+                            0 0 15px rgba(0, 255, 0, 0.2);
+                background: rgba(0, 20, 2, 0.8);
+            }
+
+            &::placeholder {
+                color: rgba(0, 255, 0, 0.3);
+            }
+        }
+
+        .shift-control {
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            position: relative;
-            border-radius: 0;
-            
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+            gap: v.$matrix-gap;
+
+            input[type="number"] {
+                width: v.$input-width;
+                min-height: unset;
+                text-align: center;
+                padding: 8px;
+                background: rgba(0, 20, 2, 0.6);
+                border: 1px solid v.$matrix-green;
+                color: v.$matrix-light;
+                font-family: v.$matrix-font-family;
                 transition: all 0.3s ease;
-            }
-            
-            &:hover {
-                color: $matrix-light;
-                transform: scale(1.1);
-                text-shadow: 0 0 10px $matrix-glow;
-                
-                &::before {
-                    border-color: $matrix-green;
-                    box-shadow: 0 0 10px $matrix-glow;
+
+                &::-webkit-inner-spin-button,
+                &::-webkit-outer-spin-button {
+                    opacity: 1;
+                    background: v.$matrix-hover-bg;
+                    border-left: 1px solid v.$matrix-green;
+                    height: 100%;
+                    margin: 0;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background: rgba(0, 255, 0, 0.2);
+                    }
+                }
+
+                &:focus {
+                    outline: none;
+                    border-color: v.$matrix-light;
+                    box-shadow: v.$matrix-box-shadow,
+                                0 0 15px rgba(0, 255, 0, 0.2);
+                    background: rgba(0, 20, 2, 0.8);
                 }
             }
         }
-        
-        .info-button {
-            margin: 0;
-            padding: 0;
-            font-weight: bold;
-            background: rgba(0, 255, 0, 0.1);
-            border: 1px solid rgba(0, 255, 0, 0.3);
-            border-top: none;
-            border-left: none;
-            border-bottom-right-radius: 8px;
-            
-            &:hover {
+    }
+
+    .caesar-actions {
+        display: flex;
+        gap: v.$matrix-gap;
+        justify-content: center;
+        margin: v.$matrix-margin * 2 0;
+        @include cipher-popup.cipher-actions;
+
+        button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
                 background: rgba(0, 255, 0, 0.2);
-                border-color: $matrix-green;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                transition: width 0.6s ease, height 0.6s ease;
+            }
+
+            &:hover::before {
+                width: 300px;
+                height: 300px;
+            }
+
+            &:active {
+                transform: translateY(2px);
+            }
+        }
+    }
+
+    .caesar-result {
+        margin-top: v.$matrix-margin;
+        padding: v.$matrix-padding;
+        border: 1px solid v.$matrix-green;
+        border-radius: v.$matrix-border-radius;
+        background: rgba(0, 20, 2, 0.4);
+        display: none;
+        animation: fadeIn v.$animation-duration-short ease-out;
+        backdrop-filter: blur(2px);
+        
+        &.show {
+            display: block;
+        }
+        
+        h4 {
+            color: v.$matrix-light;
+            margin: 0 0 v.$matrix-margin 0;
+            font-family: v.$matrix-font-family;
+            text-shadow: v.$matrix-text-shadow;
+            position: relative;
+            display: inline-block;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    v.$matrix-green,
+                    transparent
+                );
             }
         }
         
-        .close-button {
-            margin: 0;
-            padding: 0;
-            font-size: 1.8em;
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            border-top: none;
-            border-right: none;
-            border-bottom-left-radius: 8px;
-            color: #ff3333;
-            
-            &:hover {
-                background: rgba(255, 0, 0, 0.2);
-                border-color: #ff5555;
-                color: #ff5555;
-                text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-            }
+        .result-text {
+            color: v.$matrix-green;
+            font-family: v.$matrix-font-family;
+            font-size: v.$matrix-font-size-medium;
+            line-height: v.$line-height;
+            word-break: break-all;
+            text-shadow: v.$matrix-text-shadow-subtle;
+            padding: 10px;
+            background: rgba(0, 20, 2, 0.3);
+            border-radius: calc(v.$matrix-border-radius / 2);
+            border: 1px solid rgba(0, 255, 0, 0.1);
         }
     }
 }
 
-// Info Popup
 .caesar-info {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1100;
-    background: rgba(0, 10, 2, 0.98);
-    border: 2px solid $matrix-green;
-    border-radius: 8px;
-    padding: 25px;
-    max-width: 450px;
-    width: 90%;
-    box-shadow: 0 0 20px $matrix-glow;
-    animation: fadeIn 0.3s ease-out;
-
-    &::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: -1;
-        backdrop-filter: blur(3px);
-    }
-
-    h4 {
-        color: $matrix-light;
-        margin: 0 0 20px 0;
-        text-align: center;
-        font-size: 1.4em;
-        font-family: 'Courier New', monospace;
-        text-shadow: 0 0 5px $matrix-glow;
-    }
-
-    .info-content {
-        color: $matrix-green;
-        font-family: 'Courier New', monospace;
-        position: relative;
-        z-index: 1;
-
-        p {
-            margin: 12px 0;
-            line-height: 1.6;
-            text-shadow: 0 0 2px $matrix-glow;
-        }
-
-        ul {
-            margin: 15px 0;
-            padding-left: 20px;
-            
-            li {
-                margin: 8px 0;
-                line-height: 1.4;
-                text-shadow: 0 0 2px $matrix-glow;
-                
-                &::marker {
-                    color: $matrix-light;
-                }
-            }
-        }
-
-        .example {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid $matrix-green;
-            border-radius: 4px;
-            background: rgba(0, 255, 0, 0.05);
-
-            p {
-                margin: 5px 0;
-                font-family: 'Courier New', monospace;
-                letter-spacing: 1px;
-            }
-        }
-    }
-
-    .close-info {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: transparent;
-        border: none;
-        color: $matrix-green;
-        font-size: 1.5em;
-        cursor: pointer;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-        
-        &:hover {
-            color: $matrix-light;
-            transform: scale(1.1);
-            text-shadow: 0 0 10px $matrix-glow;
-            background: rgba(0, 255, 0, 0.1);
-        }
-    }
+    @include cipher-popup.cipher-info-popup;
 }
 
 // Animations
@@ -447,23 +278,39 @@ $matrix-overlay: rgba(0, 0, 0, 0.85);
 
 @keyframes slideIn {
     from {
-        transform: translateY(-20px);
         opacity: 0;
+        transform: translateY(-20px);
     }
     to {
-        transform: translateY(0);
         opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glowPulse {
+    0% {
+        text-shadow: v.$matrix-text-shadow,
+                    0 0 20px rgba(51, 255, 51, 0.3);
+    }
+    50% {
+        text-shadow: v.$matrix-text-shadow,
+                    0 0 30px rgba(51, 255, 51, 0.5);
+    }
+    100% {
+        text-shadow: v.$matrix-text-shadow,
+                    0 0 20px rgba(51, 255, 51, 0.3);
     }
 }
 
 // Responsive Design
-@media (max-width: 768px) {
+@media (max-width: v.$max-width) {
     .caesar-popup {
-        padding: 20px;
-        margin: 15px;
+        padding: v.$popup-padding;
+        margin: v.$popup-margin;
         
         .caesar-actions {
             flex-direction: column;
+            gap: v.$matrix-gap;
             
             button {
                 width: 100%;
@@ -472,11 +319,11 @@ $matrix-overlay: rgba(0, 0, 0, 0.85);
         
         .caesar-shift {
             flex-direction: column;
-            gap: 10px;
+            gap: v.$matrix-gap;
             
             .shift-label {
                 margin-right: 0;
-                margin-bottom: 5px;
+                margin-bottom: v.$matrix-margin;
             }
         }
     }
