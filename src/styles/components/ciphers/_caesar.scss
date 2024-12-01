@@ -1,6 +1,6 @@
 @use "sass:math";
-@use 'cipher-popup';
-@use 'variables' as v;
+@use '../../../core/utils/variables' as v;
+@use './shared/cipher-popup';
 
 @keyframes matrixGlow {
     0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.3); }
@@ -351,10 +351,10 @@
 }
 
 // Responsive Design
-@media (max-width: v.$max-width) {
+@include v.respond-max('sm') {
     .caesar-popup {
-        padding: v.$popup-padding;
-        margin: v.$popup-margin;
+        padding: v.$matrix-padding * 0.75;
+        margin: v.$matrix-margin;
         
         .caesar-actions {
             flex-direction: column;
@@ -364,15 +364,24 @@
                 width: 100%;
             }
         }
+    }
+}
+
+@include v.respond-max('xs') {
+    .caesar-popup {
+        padding: v.$matrix-padding * 0.5;
         
-        .caesar-shift {
-            flex-direction: column;
-            gap: v.$matrix-gap;
-            
-            .shift-label {
-                margin-right: 0;
-                margin-bottom: v.$matrix-margin;
-            }
+        h3 {
+            font-size: v.$matrix-font-size-medium;
+        }
+        
+        .shift-control {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        textarea {
+            min-height: 80px;
         }
     }
 }

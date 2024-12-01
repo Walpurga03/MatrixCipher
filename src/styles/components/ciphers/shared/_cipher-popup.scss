@@ -1,0 +1,245 @@
+@use '../../../../core/utils/variables' as v;
+
+// Animationen
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes infoPopupIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+// Haupt-Popup-Layout
+@mixin cipher-popup-layout {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: v.$matrix-overlay;
+    backdrop-filter: blur(v.$blur-radius);
+    z-index: v.$z-overlay;
+    animation: fadeIn v.$animation-duration-short ease-out;
+}
+
+// Popup-Container
+@mixin cipher-popup-container {
+    position: relative;
+    background: v.$matrix-background;
+    border: v.$matrix-border;
+    border-radius: v.$matrix-border-radius;
+    padding: v.$matrix-padding;
+    width: v.$popup-width;
+    max-width: v.$max-popup-width;
+    box-shadow: v.$matrix-box-shadow,
+                v.$matrix-inset-shadow;
+    animation: slideIn v.$animation-duration-medium ease-out;
+
+    &.info-active {
+        opacity: 0.1;
+        pointer-events: none;
+        filter: blur(4px);
+    }
+
+    @include v.respond-max('lg') {
+        max-width: 90%;
+    }
+
+    @include v.respond-max('md') {
+        padding: v.$matrix-padding * 0.8;
+    }
+
+    @include v.respond-max('sm') {
+        width: 95%;
+        padding: v.$matrix-padding * 0.6;
+    }
+
+    @include v.respond-max('xs') {
+        width: 98%;
+        padding: v.$matrix-padding * 0.5;
+    }
+}
+
+// Steuerelemente (Buttons)
+@mixin cipher-controls {
+    position: absolute;
+    top: v.$matrix-margin;
+    right: v.$matrix-margin;
+    display: flex;
+    gap: v.$matrix-gap;
+    z-index: v.$z-controls;
+
+    @include v.respond-max('sm') {
+        gap: v.$matrix-gap * 0.7;
+    }
+
+    button {
+        background: none;
+        border: none;
+        color: v.$matrix-green;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: v.$matrix-font-size-medium;
+        font-weight: bold;
+        background: v.$matrix-hover-bg;
+        border: 1px solid v.$matrix-border-hover;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: v.$matrix-active-bg;
+            border-color: v.$matrix-green;
+            color: v.$matrix-light;
+        }
+
+        @include v.respond-max('sm') {
+            font-size: v.$matrix-font-size-small;
+            width: 35px;
+            height: 35px;
+        }
+    }
+}
+
+// Aktions-Buttons
+@mixin cipher-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: v.$matrix-gap;
+    margin-top: v.$matrix-margin;
+
+    @include v.respond-max('sm') {
+        flex-direction: column;
+        gap: v.$matrix-gap * 0.7;
+    }
+
+    button {
+        flex: 1;
+        background: linear-gradient(135deg, rgba(0, 40, 0, 0.9), rgba(0, 30, 0, 0.9));
+        border: v.$matrix-border;
+        color: v.$matrix-green;
+        padding: v.$matrix-padding * 0.5;
+        border-radius: v.$matrix-border-radius;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: v.$letter-spacing;
+        font-size: v.$matrix-font-size-small;
+        transition: all v.$animation-duration-short ease;
+
+        &:hover {
+            background: linear-gradient(135deg, rgba(0, 50, 0, 0.9), rgba(0, 40, 0, 0.9));
+            border-color: v.$matrix-light;
+            color: v.$matrix-light;
+            transform: translateY(-1px);
+            box-shadow: v.$matrix-hover-shadow;
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        @include v.respond-max('sm') {
+            font-size: v.$matrix-font-size-small * 0.9;
+            padding: v.$matrix-padding * 0.4;
+        }
+    }
+}
+
+// Info-Popup
+@mixin cipher-info-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    background: v.$matrix-background;
+    border: v.$matrix-border;
+    border-radius: v.$matrix-border-radius;
+    padding: v.$matrix-padding;
+    z-index: v.$z-info;
+    animation: infoPopupIn v.$animation-duration-short ease-out;
+    box-shadow: v.$matrix-box-shadow;
+
+    @include v.respond-max('sm') {
+        width: 95%;
+        padding: v.$matrix-padding * 0.7;
+    }
+
+    .close-info {
+        position: absolute;
+        top: v.$matrix-margin;
+        right: v.$matrix-margin;
+        background: none;
+        border: none;
+        color: v.$matrix-green;
+        cursor: pointer;
+        font-size: v.$matrix-font-size-medium;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: v.$matrix-light;
+        }
+    }
+
+    h4 {
+        color: v.$matrix-light;
+        margin: 0 0 v.$matrix-margin 0;
+        font-size: v.$matrix-font-size-medium;
+        text-transform: uppercase;
+        letter-spacing: v.$letter-spacing;
+    }
+
+    .info-content {
+        color: v.$matrix-green;
+        font-size: v.$matrix-font-size-small;
+        line-height: 1.6;
+
+        p {
+            margin: v.$matrix-margin 0;
+        }
+
+        ul {
+            margin: v.$matrix-margin 0;
+            padding-left: v.$matrix-padding;
+        }
+
+        .example {
+            background: v.$matrix-background-alt;
+            padding: v.$matrix-padding * 0.7;
+            border-radius: v.$matrix-border-radius;
+            margin: v.$matrix-margin 0;
+
+            p {
+                margin: v.$matrix-margin * 0.5 0;
+                font-family: v.$matrix-font-family;
+            }
+        }
+    }
+}

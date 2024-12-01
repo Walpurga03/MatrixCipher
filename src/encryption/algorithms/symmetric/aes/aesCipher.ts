@@ -1,6 +1,6 @@
-import CryptoJS from 'crypto-js';
-import { displayResult } from './encryptions';
-import { initializeAndShowWidget, hideWidget } from './widgetUtils';
+import CryptoJS from "crypto-js";
+import { displayResult } from "../../../../encryption/shared/encryptions";
+import { initializeAndShowWidget, hideWidget } from "../../../../core/utils/widgetUtils";
 
 
 export function showAesCipherPopup() {

@@ -29,7 +29,7 @@
                             <button class="menu-button" onclick="selectMethod('Vigenère Cipher')" data-tooltip="Verschlüsseln mit einem wiederkehrenden Schlüssel">
                                 Vigenère
                             </button>
-                            <button class="menu-button" onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">
+                            <!-- <button class="menu-button" onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">
                                 XOR
                             </button>
                             <button class="menu-button" onclick="selectMethod('Blowfish')" data-tooltip="Symmetric block cipher">
@@ -46,7 +46,7 @@
                             </button>
                             <button class="menu-button" onclick="selectMethod('RSA')" data-tooltip="Asymmetric encryption using public and private keys">
                                 RSA
-                            </button>
+                            </button> -->
                         </div>
                     </div>
                 </div>
@@ -59,8 +59,8 @@
     <script src="https://embed.twentyuno.net/js/app.js"></script>
 
     <script type="module">
-        import startMatrixAnimation from '/src/matrix_rain.ts';
-        import { selectMethod } from '/src/encryption/encryptions.ts';
+        import startMatrixAnimation from '/src/core/animation/matrix_rain.ts';
+        import { selectMethod } from '/src/encryption/shared/encryptions.ts';
 
         startMatrixAnimation('matrixCanvas');
 

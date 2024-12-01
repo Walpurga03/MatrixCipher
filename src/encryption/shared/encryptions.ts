@@ -1,13 +1,13 @@
-import { showCaesarCipherPopup } from './caesarCipher';
-import { showVigenereCipherPopup } from './vigenereCipher';
-import { showXorCipherPopup } from './xorCipher';
-import { showBlowfishCipherPopup } from './blowfishCipher';
-import { showSha256CipherPopup } from './sha256Cipher';
-import { showRipemd160CipherPopup } from './ripemd160Cipher';
-import { showAesCipherPopup } from './aesCipher';
-import { showRsaCipherPopup } from './rsaCipher';
-import { caesarEncrypt, caesarDecrypt } from './caesarCipher';
-import { vigenereEncrypt, vigenereDecrypt } from './vigenereCipher';
+import { showCaesarCipherPopup } from "../algorithms/symmetric/caesar/caesarCipher";
+import { showVigenereCipherPopup } from "../algorithms/symmetric/vigenere/vigenereCipher";
+import { showXorCipherPopup } from "../algorithms/symmetric/xor/xorCipher";
+import { showAesCipherPopup } from "../algorithms/symmetric/aes/aesCipher";
+import { showBlowfishCipherPopup } from "../algorithms/symmetric/blowfish/blowfishCipher";
+import { showRsaCipherPopup } from "../algorithms/asymmetric/rsa/rsaCipher";
+import { showRipemd160CipherPopup } from "../algorithms/hash/ripemd160Cipher";
+import { showSha256CipherPopup } from "../algorithms/hash/sha256Cipher";
+import { caesarEncrypt, caesarDecrypt } from "../algorithms/symmetric/caesar/caesarCipher";
+import { vigenereEncrypt, vigenereDecrypt } from "../algorithms/symmetric/vigenere/vigenereCipher";
 
 // Funktion zum Ausblenden des Menüs und des Widgets
 export function hideMenuAndWidget(menuElement: HTMLElement) {
@@ -20,6 +20,18 @@ export function hideMenuAndWidget(menuElement: HTMLElement) {
     }
 }
 
+// Funktion zum Anzeigen des Menüs und des Widgets
+export function showMenuAndWidget(menuElement: HTMLElement) {
+    if (menuElement) {
+        menuElement.style.display = 'block';
+        const widgetContainer = document.getElementById('donate-widget')?.parentElement as HTMLElement;
+        if (widgetContainer) {
+            widgetContainer.style.display = 'block';
+        }
+    }
+}
+
+// Funktion zur Auswahl der Verschlüsselungsmethode
 export function selectMethod(method: string) {
     const menuElement = document.getElementById('menu') as HTMLElement;
 

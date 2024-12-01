@@ -1,5 +1,5 @@
-import { displayResult } from './encryptions';
-import { initializeAndShowWidget, hideWidget } from './widgetUtils';
+import { displayResult } from "../../../../encryption/shared/encryptions";
+import { initializeAndShowWidget, hideWidget } from "../../../../core/utils/widgetUtils";
 
 
 export function showXorCipherPopup() {
