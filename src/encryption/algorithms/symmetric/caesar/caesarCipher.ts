@@ -2,7 +2,33 @@
 const MIN_KEY = 1;
 const MAX_KEY = 25;
 
+// Sound-Effekt für Matrix-Ambiente
+let matrixSound: HTMLAudioElement;
+
+function initMatrixSound() {
+    matrixSound = new Audio('/src/assets/sounds/matrix-sound.mp3');
+    matrixSound.volume = 0.3; // 30% Lautstärke
+    matrixSound.loop = true;
+}
+
+function playMatrixSound() {
+    if (!matrixSound) {
+        initMatrixSound();
+    }
+    matrixSound.play().catch(err => console.log('Audio konnte nicht abgespielt werden:', err));
+}
+
+function stopMatrixSound() {
+    if (matrixSound) {
+        matrixSound.pause();
+        matrixSound.currentTime = 0;
+    }
+}
+
 export function showCaesarCipherPopup() {
+    // Starte den Matrix-Sound
+    playMatrixSound();
+    
     // Erstelle Overlay und Popup
     const overlay = document.createElement('div');
     overlay.className = 'caesar-overlay';
@@ -18,16 +44,16 @@ export function showCaesarCipherPopup() {
         </div>
         
         <div class="caesar-header">
-            <h3>Caesar-Verschlüsselung</h3>
+            <h3>CAESAR-VERSCHLÜSSELUNG</h3>
         </div>
         
         <div class="caesar-input">
-            <label for="caesar-text">Text eingeben:</label>
+            <label for="caesar-text">TEXT EINGEBEN:</label>
             <textarea id="caesar-text" placeholder="Text zum Verschlüsseln oder Entschlüsseln eingeben..."></textarea>
         </div>
         
         <div class="caesar-shift">
-            <span class="shift-label">Verschiebung:</span>
+            <label>Verschiebung:</label>
             <div class="shift-control">
                 <button onclick="decrementShift()">-</button>
                 <input type="number" id="caesar-shift" min="${MIN_KEY}" max="${MAX_KEY}" value="3">
@@ -36,8 +62,8 @@ export function showCaesarCipherPopup() {
         </div>
         
         <div class="caesar-actions">
-            <button onclick="handleCaesarEncrypt()">Verschlüsseln</button>
-            <button onclick="handleCaesarDecrypt()">Entschlüsseln</button>
+            <button onclick="handleCaesarEncrypt()">VERSCHLÜSSELN</button>
+            <button onclick="handleCaesarDecrypt()">ENTSCHLÜSSELN</button>
         </div>
         
         <div id="caesar-result" class="caesar-result">
@@ -53,6 +79,9 @@ export function showCaesarCipherPopup() {
 
 // Funktion zum Schließen des Popups und Anzeigen des Menüs
 export function closeCaesarPopup() {
+    // Stoppe den Matrix-Sound
+    stopMatrixSound();
+    
     const overlay = document.querySelector('.caesar-overlay');
     if (overlay) {
         overlay.remove();
@@ -76,48 +105,42 @@ export function closeCaesarPopup() {
 }
 
 // Funktion zum Anzeigen der Caesar-Cipher-Info
-export function showCaesarInfo() {
+function showCaesarInfo() {
+    const mainPopup = document.querySelector('.caesar-popup');
+    mainPopup?.classList.add('info-active');
+    
+    const infoOverlay = document.createElement('div');
+    infoOverlay.className = 'caesar-info-overlay';
+    
     const infoPopup = document.createElement('div');
-    infoPopup.className = 'caesar-info';
+    infoPopup.className = 'caesar-info-popup';
     
-    // Hauptpopup ausblenden
-    const caesarPopup = document.querySelector('.caesar-popup');
-    if (caesarPopup) {
-        caesarPopup.classList.add('info-active');
-    }
-    
-    infoPopup.innerHTML = `
-        <button class="close-info" onclick="closeCaesarInfo()">&times;</button>
-        <h4>Caesar-Verschlüsselung</h4>
-        <div class="info-content">
-            <p>Die Caesar-Verschlüsselung ist eine der einfachsten und ältesten Verschlüsselungstechniken.</p>
-            <p>Funktionsweise:</p>
-            <ul>
-                <li>Jeder Buchstabe wird um eine bestimmte Anzahl von Positionen im Alphabet verschoben</li>
-                <li>Die Verschiebung (${MIN_KEY}-${MAX_KEY}) bestimmt den Schlüssel</li>
-            </ul>
-            <p>Beispiel mit Verschiebung 3:</p>
-            <div class="example">
-                <p>Text: HALLO</p>
-                <p>Verschlüsselt: KDOOR</p>
-            </div>
-        </div>
+    const infoContent = document.createElement('div');
+    infoContent.className = 'info-content';
+    infoContent.innerHTML = `
+        <h3>Caesar-Verschlüsselung</h3>
+        <p>Die Caesar-Verschlüsselung ist eine der einfachsten und bekanntesten Verschlüsselungstechniken. Dabei wird jeder Buchstabe im Text um eine bestimmte Anzahl von Positionen im Alphabet verschoben.</p>
+        <p>Beispiel: Bei einer Verschiebung um 3 Positionen wird aus "A" ein "D", aus "B" ein "E", usw.</p>
+        <p><a href="https://de.wikipedia.org/wiki/Caesar-Verschl%C3%BCsselung" target="_blank" style="color: #00ff00; text-decoration: underline;">Mehr auf Wikipedia →</a></p>
     `;
     
-    document.body.appendChild(infoPopup);
+    infoPopup.innerHTML = `
+        <button class="close-button" onclick="closeCaesarInfo()">&times;</button>
+        ${infoContent.outerHTML}
+    `;
+    
+    infoOverlay.appendChild(infoPopup);
+    document.body.appendChild(infoOverlay);
 }
 
 // Funktion zum Schließen des Info-Popups
 function closeCaesarInfo() {
-    const infoPopup = document.querySelector('.caesar-info');
-    if (infoPopup) {
-        infoPopup.remove();
-        
-        // Hauptpopup wieder aktivieren
-        const caesarPopup = document.querySelector('.caesar-popup');
-        if (caesarPopup) {
-            caesarPopup.classList.remove('info-active');
-        }
+    const mainPopup = document.querySelector('.caesar-popup');
+    mainPopup?.classList.remove('info-active');
+    
+    const infoOverlay = document.querySelector('.caesar-info-overlay');
+    if (infoOverlay) {
+        infoOverlay.remove();
     }
 }
 

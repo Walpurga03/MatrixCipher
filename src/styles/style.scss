@@ -3,6 +3,6 @@
 @use 'core/layout';
 @use 'core/inputBar';
 @use 'components/menu/menu';
-@use 'components/ciphers/shared/cipher-popup';
 @use 'components/ciphers/caesar';
 @use 'components/ciphers/vigenere';
+@use 'components/encryption-popup';
