@@ -2,40 +2,50 @@
 @use 'cipher-popup';
 @use 'variables' as v;
 
+@keyframes matrixGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.3); }
+    50% { text-shadow: 0 0 15px rgba(0, 255, 0, 0.7), 0 0 30px rgba(0, 255, 0, 0.5); }
+}
+
+@keyframes borderFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+@keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
 .caesar-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: v.$matrix-overlay;
-    backdrop-filter: blur(v.$blur-radius);
-    z-index: v.$z-overlay;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: fadeIn v.$animation-duration-short ease-out;
-    @include cipher-popup.cipher-popup-layout;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .caesar-popup {
+    background: linear-gradient(135deg, rgba(0, 20, 0, 0.97) 0%, rgba(0, 10, 0, 0.98) 100%);
+    border: 2px solid transparent;
+    border-image: linear-gradient(90deg, #00ff00, #00aa00, #00ff00) 1;
+    border-radius: 2px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 600px;
     position: relative;
-    background: linear-gradient(
-        135deg,
-        rgba(0, 20, 2, 0.95) 0%,
-        rgba(0, 10, 2, 0.98) 100%
-    );
-    border: v.$matrix-border;
-    border-radius: v.$matrix-border-radius;
-    padding: v.$matrix-padding;
-    width: v.$popup-width;
-    max-width: v.$max-popup-width;
-    box-shadow: v.$matrix-box-shadow,
-                v.$matrix-inset-shadow,
-                0 0 30px rgba(0, 255, 0, 0.1);
-    animation: slideIn v.$animation-duration-medium cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(5px);
-    @include cipher-popup.cipher-popup-container;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 0, 0.2),
+        inset 0 0 20px rgba(0, 255, 0, 0.1);
+    animation: popIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    overflow: hidden;
 
     &::before {
         content: '';
@@ -44,151 +54,154 @@
         left: 0;
         right: 0;
         bottom: 0;
-        border-radius: v.$matrix-border-radius;
-        background: linear-gradient(45deg, transparent, rgba(0, 255, 0, 0.1));
+        background: 
+            linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 255, 0, 0.03) 45%,
+                rgba(0, 255, 0, 0.03) 55%,
+                transparent 100%);
+        animation: scanline 8s linear infinite;
         pointer-events: none;
     }
 
-    .caesar-header {
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #00ff00, transparent);
+        background-size: 200% 100%;
+        animation: borderFlow 2s linear infinite;
+    }
+
+    h3 {
+        color: #00ff00;
         text-align: center;
-        margin-bottom: calc(v.$matrix-margin * 2);
+        font-size: 2em;
+        margin: 0 0 2rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-family: 'Courier New', monospace;
+        animation: matrixGlow 2s ease-in-out infinite;
         position: relative;
         
-        h3 {
-            color: v.$matrix-light;
-            font-size: v.$matrix-font-size-large;
-            font-family: v.$matrix-font-family;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: v.$letter-spacing;
-            text-shadow: v.$matrix-text-shadow,
-                        0 0 20px rgba(51, 255, 51, 0.3);
-            animation: glowPulse 2s ease-in-out infinite;
-        }
-
         &::after {
             content: '';
             position: absolute;
             bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50%;
+            width: 60%;
             height: 1px;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                v.$matrix-green,
-                transparent
-            );
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
         }
     }
 
-    .caesar-controls {
-        position: absolute;
-        top: 0;
-        left: 0;
+    label {
+        color: #00ff00;
+        display: block;
+        margin-bottom: 0.8rem;
+        font-size: 1.1em;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+
+    textarea {
         width: 100%;
-        display: flex;
-        justify-content: space-between;
-        padding: 0;
-        @include cipher-popup.cipher-controls;
+        background: rgba(0, 15, 0, 0.7);
+        border: 1px solid rgba(0, 255, 0, 0.4);
+        border-radius: 4px;
+        color: #00ff00;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        font-family: 'Courier New', monospace;
+        font-size: 1.1em;
+        letter-spacing: 1px;
+        resize: vertical;
+        min-height: 100px;
+        transition: all 0.3s ease;
+        
+        &::placeholder {
+            color: rgba(0, 255, 0, 0.3);
+            font-style: italic;
+        }
+        
+        &:hover {
+            border-color: rgba(0, 255, 0, 0.6);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+        }
+        
+        &:focus {
+            outline: none;
+            border-color: #00ff00;
+            background: rgba(0, 20, 0, 0.8);
+            box-shadow: 
+                inset 0 0 15px rgba(0, 255, 0, 0.1),
+                0 0 20px rgba(0, 255, 0, 0.2);
+        }
     }
 
-    .caesar-content {
+    .shift-control {
         display: flex;
-        flex-direction: column;
-        gap: v.$matrix-gap;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: rgba(0, 20, 0, 0.6);
+        border-radius: 6px;
+        border: 1px solid rgba(0, 255, 0, 0.3);
 
-        label {
-            color: v.$matrix-green;
-            font-family: v.$matrix-font-family;
-            font-size: v.$matrix-font-size-small;
-            margin-bottom: calc(v.$matrix-margin / 3);
-            transition: color 0.3s ease;
-
-            &:hover {
-                color: v.$matrix-light;
-            }
-        }
-
-        input, textarea {
-            background: rgba(0, 20, 2, 0.6);
-            border: 1px solid v.$matrix-green;
-            color: v.$matrix-light;
-            padding: calc(v.$matrix-padding / 2);
-            font-family: v.$matrix-font-family;
-            font-size: v.$matrix-font-size-small;
-            resize: vertical;
-            min-height: v.$min-input-height;
-            border-radius: calc(v.$matrix-border-radius / 2);
+        input[type="number"] {
+            width: 70px;
+            background: rgba(0, 25, 0, 0.8);
+            border: 1px solid rgba(0, 255, 0, 0.4);
+            border-radius: 4px;
+            color: #00ff00;
+            padding: 0.6rem;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
             transition: all 0.3s ease;
+
+            &::-webkit-inner-spin-button,
+            &::-webkit-outer-spin-button {
+                opacity: 1;
+                background: rgba(0, 40, 0, 0.8);
+                border-left: 1px solid rgba(0, 255, 0, 0.4);
+                height: 100%;
+                margin: 0;
+                cursor: pointer;
+
+                &:hover {
+                    background: rgba(0, 60, 0, 0.8);
+                }
+            }
 
             &:focus {
                 outline: none;
-                border-color: v.$matrix-light;
-                box-shadow: v.$matrix-box-shadow,
-                            0 0 15px rgba(0, 255, 0, 0.2);
-                background: rgba(0, 20, 2, 0.8);
-            }
-
-            &::placeholder {
-                color: rgba(0, 255, 0, 0.3);
+                border-color: #00ff00;
+                box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
             }
         }
-
-        .shift-control {
-            display: flex;
-            align-items: center;
-            gap: v.$matrix-gap;
-
-            input[type="number"] {
-                width: v.$input-width;
-                min-height: unset;
-                text-align: center;
-                padding: 8px;
-                background: rgba(0, 20, 2, 0.6);
-                border: 1px solid v.$matrix-green;
-                color: v.$matrix-light;
-                font-family: v.$matrix-font-family;
-                transition: all 0.3s ease;
-
-                &::-webkit-inner-spin-button,
-                &::-webkit-outer-spin-button {
-                    opacity: 1;
-                    background: v.$matrix-hover-bg;
-                    border-left: 1px solid v.$matrix-green;
-                    height: 100%;
-                    margin: 0;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-
-                    &:hover {
-                        background: rgba(0, 255, 0, 0.2);
-                    }
-                }
-
-                &:focus {
-                    outline: none;
-                    border-color: v.$matrix-light;
-                    box-shadow: v.$matrix-box-shadow,
-                                0 0 15px rgba(0, 255, 0, 0.2);
-                    background: rgba(0, 20, 2, 0.8);
-                }
-            }
-        }
-    }
-
-    .caesar-actions {
-        display: flex;
-        gap: v.$matrix-gap;
-        justify-content: center;
-        margin: v.$matrix-margin * 2 0;
-        @include cipher-popup.cipher-actions;
 
         button {
+            background: rgba(0, 40, 0, 0.8);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
 
             &::before {
                 content: '';
@@ -200,105 +213,140 @@
                 background: rgba(0, 255, 0, 0.2);
                 border-radius: 50%;
                 transform: translate(-50%, -50%);
-                transition: width 0.6s ease, height 0.6s ease;
+                transition: width 0.4s ease, height 0.4s ease;
             }
 
-            &:hover::before {
-                width: 300px;
-                height: 300px;
+            &:hover {
+                background: rgba(0, 60, 0, 0.8);
+                box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+                transform: translateY(-1px);
+
+                &::before {
+                    width: 150%;
+                    height: 150%;
+                }
             }
 
             &:active {
-                transform: translateY(2px);
+                transform: translateY(1px);
             }
         }
     }
 
-    .caesar-result {
-        margin-top: v.$matrix-margin;
-        padding: v.$matrix-padding;
-        border: 1px solid v.$matrix-green;
-        border-radius: v.$matrix-border-radius;
-        background: rgba(0, 20, 2, 0.4);
-        display: none;
-        animation: fadeIn v.$animation-duration-short ease-out;
-        backdrop-filter: blur(2px);
-        
-        &.show {
-            display: block;
-        }
-        
-        h4 {
-            color: v.$matrix-light;
-            margin: 0 0 v.$matrix-margin 0;
-            font-family: v.$matrix-font-family;
-            text-shadow: v.$matrix-text-shadow;
-            position: relative;
-            display: inline-block;
+    .caesar-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
 
-            &::after {
+        button {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(0, 40, 0, 0.9), rgba(0, 30, 0, 0.9));
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.1em;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+
+            &::before {
                 content: '';
                 position: absolute;
-                bottom: -5px;
-                left: 0;
-                width: 100%;
-                height: 1px;
-                background: linear-gradient(
-                    90deg,
-                    v.$matrix-green,
-                    transparent
-                );
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(0, 255, 0, 0.2) 0%, transparent 70%);
+                transform: translate(-100%, -100%);
+                transition: transform 0.5s ease;
+            }
+
+            &:hover {
+                background: linear-gradient(135deg, rgba(0, 50, 0, 0.9), rgba(0, 40, 0, 0.9));
+                box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+                transform: translateY(-2px);
+
+                &::before {
+                    transform: translate(0, 0);
+                }
+            }
+
+            &:active {
+                transform: translateY(1px);
             }
         }
-        
-        .result-text {
-            color: v.$matrix-green;
-            font-family: v.$matrix-font-family;
-            font-size: v.$matrix-font-size-medium;
-            line-height: v.$line-height;
-            word-break: break-all;
-            text-shadow: v.$matrix-text-shadow-subtle;
-            padding: 10px;
-            background: rgba(0, 20, 2, 0.3);
-            border-radius: calc(v.$matrix-border-radius / 2);
-            border: 1px solid rgba(0, 255, 0, 0.1);
+    }
+
+    .info-button, .close-button {
+        position: absolute;
+        background: transparent;
+        border: none;
+        color: #00ff00;
+        font-size: 1.6em;
+        cursor: pointer;
+        padding: 0.5rem;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 10;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
         }
+
+        &:hover {
+            color: #fff;
+            text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+            transform: scale(1.1);
+
+            &::before {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    .info-button {
+        top: 1rem;
+        left: 1rem;
+    }
+
+    .close-button {
+        top: 1rem;
+        right: 1rem;
     }
 }
 
-.caesar-info {
-    @include cipher-popup.cipher-info-popup;
-}
-
-// Animations
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes glowPulse {
+@keyframes popIn {
     0% {
-        text-shadow: v.$matrix-text-shadow,
-                    0 0 20px rgba(51, 255, 51, 0.3);
-    }
-    50% {
-        text-shadow: v.$matrix-text-shadow,
-                    0 0 30px rgba(51, 255, 51, 0.5);
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
     }
     100% {
-        text-shadow: v.$matrix-text-shadow,
-                    0 0 20px rgba(51, 255, 51, 0.3);
+        opacity: 1;
+        transform: scale(1) translateY(0);
     }
 }
 
