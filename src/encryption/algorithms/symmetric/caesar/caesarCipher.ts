@@ -2,33 +2,7 @@
 const MIN_KEY = 1;
 const MAX_KEY = 25;
 
-// Sound-Effekt für Matrix-Ambiente
-let matrixSound: HTMLAudioElement;
-
-function initMatrixSound() {
-    matrixSound = new Audio('/src/assets/sounds/matrix-sound.mp3');
-    matrixSound.volume = 0.3; // 30% Lautstärke
-    matrixSound.loop = true;
-}
-
-function playMatrixSound() {
-    if (!matrixSound) {
-        initMatrixSound();
-    }
-    matrixSound.play().catch(err => console.log('Audio konnte nicht abgespielt werden:', err));
-}
-
-function stopMatrixSound() {
-    if (matrixSound) {
-        matrixSound.pause();
-        matrixSound.currentTime = 0;
-    }
-}
-
 export function showCaesarCipherPopup() {
-    // Starte den Matrix-Sound
-    playMatrixSound();
-    
     // Erstelle Overlay und Popup
     const overlay = document.createElement('div');
     overlay.className = 'caesar-overlay';
@@ -79,9 +53,6 @@ export function showCaesarCipherPopup() {
 
 // Funktion zum Schließen des Popups und Anzeigen des Menüs
 export function closeCaesarPopup() {
-    // Stoppe den Matrix-Sound
-    stopMatrixSound();
-    
     const overlay = document.querySelector('.caesar-overlay');
     if (overlay) {
         overlay.remove();

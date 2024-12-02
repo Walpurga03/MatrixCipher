@@ -1,30 +1,4 @@
-// Sound-Effekt für Matrix Rain
-let matrixSound: HTMLAudioElement;
-
-function initMatrixSound() {
-    matrixSound = new Audio('/src/assets/sounds/matrix-sound.mp3');
-    matrixSound.volume = 0.3;
-    matrixSound.loop = true;
-}
-
-function playMatrixSound() {
-    if (!matrixSound) {
-        initMatrixSound();
-    }
-    matrixSound.play().catch(err => console.log('Audio konnte nicht abgespielt werden:', err));
-}
-
-function stopMatrixSound() {
-    if (matrixSound) {
-        matrixSound.pause();
-        matrixSound.currentTime = 0;
-    }
-}
-
 function startMatrixAnimation(canvasId: string) {
-    // Starte den Matrix-Sound
-    playMatrixSound();
-
     const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!canvas) {
         console.error(`Canvas element with id "${canvasId}" not found.`);

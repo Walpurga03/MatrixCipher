@@ -5,9 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MatrixCipher</title>
     <link rel="stylesheet" href="/src/styles/style.scss">
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 5px #00ff00;
+            }
+            50% {
+                box-shadow: 0 0 20px #00ff00;
+            }
+            100% {
+                box-shadow: 0 0 5px #00ff00;
+            }
+        }
+
+        #start-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 1s;
+        }
+
+        #start-button {
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            animation: glowPulse 2s infinite;
+        }
+
+        #start-button:hover {
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 30px #00ff00;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
     <canvas id="matrixCanvas"></canvas>
+    <div id="start-container">
+        <button id="start-button">ENTER THE MATRIX</button>
+    </div>
     <div id="computer-container">
         <div id="main-container">
             <div id="tooltip-window"></div>
@@ -61,26 +118,37 @@
     <script type="module">
         import startMatrixAnimation from '/src/core/animation/matrix_rain.ts';
         import { selectMethod } from '/src/encryption/shared/encryptions.ts';
+        import { matrixAudio } from '/src/core/audio/matrixAudio.ts';
 
+        // Matrix Rain starten, aber noch keine Nachrichten
         startMatrixAnimation('matrixCanvas');
 
+        // Start-Button-Handler
+        document.getElementById('start-button').addEventListener('click', () => {
+            // Button ausblenden
+            document.getElementById('start-container').style.display = 'none';
+            // Matrix-Sequenz starten
+            setTimeout(showMatrixMessages, 500);
+        });
+
         window.selectMethod = selectMethod; // Exportiert die selectMethod-Funktion für das HTML
-    </script>
-    <script>
+
         const messages = [
-            // "Wake up, Neo...",
-            // "The Matrix has you...",
-            // "Follow the white rabbit...",
+            "Wake up, Neo...",
+            "The Matrix has you...",
+            "Follow the white rabbit...",
             "Knock, knock, Neo..."
         ];
 
         async function blinkCursor(times) {
             const cursor = document.getElementById('cursor');
+            console.log('Starting cursor blink');
             for (let i = 0; i < times * 2; i++) {
                 cursor.style.opacity = i % 2 === 0 ? '0' : '1';
                 await new Promise(resolve => setTimeout(resolve, 500));
             }
             cursor.style.opacity = '1';
+            console.log('Cursor blink finished');
         }
 
         async function typeMessage(message, element, speed = 100) {
@@ -102,18 +170,23 @@
         }
 
         async function showMatrixMessages() {
+            console.log('Starting matrix messages');
             const computerScreen = document.getElementById('computer-screen');
             const terminal = document.getElementById('terminal-window');
             const messageElement = document.getElementById('message-text');
             const menu = document.getElementById('menu');
+            const audio = matrixAudio;  // Verwende den importierten matrixAudio
             
             // Computer-Screen einblenden
             computerScreen.style.display = 'flex';
             
             // Zeige Terminal
             terminal.style.display = 'flex';
+            console.log('Terminal shown');
 
-            // Cursor 5 mal blinken lassen
+            // Cursor blinken lassen und Sound starten
+            audio.play();
+            console.log('Sound started');
             await blinkCursor(5);
             
             // Zeige Nachrichten
@@ -122,16 +195,15 @@
                 await deleteMessage(messageElement);
             }
             
-            // Verstecke Terminal
+            // Verstecke Terminal und stoppe Sound
             terminal.style.display = 'none';
+            audio.stop();
+            console.log('Sound stopped');
             
             // Zeige Menü
             menu.style.display = 'block';
             computerScreen.classList.add('menu-visible');
         }
-
-        // Starte die Sequenz nach einer kurzen Verzögerung
-        setTimeout(showMatrixMessages, 2000);
 
         const tooltipWindow = document.getElementById('tooltip-window');
         
