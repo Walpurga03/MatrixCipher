@@ -24,33 +24,26 @@ function startMatrixAnimation(canvasId: string) {
     function draw() {
         if (ctx) {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        }
-        if (ctx) {
             ctx.fillRect(0, 0, width, height);
-        }
-
-        if (ctx) {
             ctx.fillStyle = '#0F0';
-        }
-        if (ctx) {
-            ctx.font = `${fontSize}px monospace`;
-        }
+            ctx.font = fontSize + 'px monospace';
 
-        drops.forEach((drop, i) => {
-            const text = chars[Math.floor(Math.random() * chars.length)];
-            if (ctx) {
-                ctx.fillText(text, i * fontSize, drop * fontSize);
-            }
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
 
-            if (drop * fontSize > height || Math.random() > 0.97) {
-                drops[i] = 0;
-            } else {
+                ctx.fillText(text, x, y);
+
+                if (y > height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
                 drops[i]++;
             }
-        });
+        }
     }
 
-    setInterval(draw, 50);
+    return setInterval(draw, 33);
 }
 
 export default startMatrixAnimation;
