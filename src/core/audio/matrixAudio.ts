@@ -18,7 +18,7 @@ class MatrixAudio {
         try {
             if (!this.audio) {
                 console.log('Initializing audio...');
-                this.audio = new Audio('/src/assets/sounds/matrix-sound.mp3');
+                this.audio = new Audio('./src/assets/sounds/matrix-sound.mp3');
                 this.audio.volume = 0.3;
                 this.audio.loop = true;
                 console.log('Audio initialized successfully');

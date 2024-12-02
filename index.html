@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MatrixCipher</title>
-    <link rel="stylesheet" href="/src/styles/style.scss">
+    <link rel="stylesheet" href="./src/styles/style.scss">
     <style>
         @keyframes fadeIn {
             from {
@@ -116,9 +116,9 @@
     <script src="https://embed.twentyuno.net/js/app.js"></script>
 
     <script type="module">
-        import startMatrixAnimation from '/src/core/animation/matrix_rain.ts';
-        import { selectMethod } from '/src/encryption/shared/encryptions.ts';
-        import { matrixAudio } from '/src/core/audio/matrixAudio.ts';
+        import startMatrixAnimation from './src/core/animation/matrix_rain.ts';
+        import { selectMethod } from './src/encryption/shared/encryptions.ts';
+        import { matrixAudio } from './src/core/audio/matrixAudio.ts';
 
         // Matrix Rain starten, aber noch keine Nachrichten
         startMatrixAnimation('matrixCanvas');
