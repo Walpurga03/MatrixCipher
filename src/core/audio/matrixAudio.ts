@@ -17,10 +17,17 @@ class MatrixAudio {
     public init() {
         try {
             if (!this.audio) {
-                const audioPath = 'https://walpurga03.github.io/MatrixCipher/public/audio/matrix-sound.mp3';
+                const audioPath = 'https://walpurga03.github.io/MatrixCipher/audio/matrix-sound.mp3';
                 console.log('Initializing audio with path:', audioPath);
                 
-                this.audio = new Audio(audioPath);
+                // Create audio element
+                this.audio = document.createElement('audio');
+                // Add source element
+                const source = document.createElement('source');
+                source.src = audioPath;
+                source.type = 'audio/mpeg';
+                this.audio.appendChild(source);
+                
                 console.log('Audio object created');
                 
                 // Debug-Events hinzufügen
