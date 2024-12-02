@@ -2,6 +2,7 @@
 class MatrixAudio {
     private static instance: MatrixAudio;
     private audio: HTMLAudioElement | null = null;
+    private initPromise: Promise<void> | null = null;
 
     private constructor() {
         console.log('MatrixAudio instance created');
@@ -14,67 +15,66 @@ class MatrixAudio {
         return MatrixAudio.instance;
     }
 
-    public init() {
-        try {
-            if (!this.audio) {
-                const audioPath = 'https://walpurga03.github.io/MatrixCipher/audio/matrix-sound.mp3';
-                console.log('Initializing audio with path:', audioPath);
-                
-                // Create audio element
-                this.audio = document.createElement('audio');
-                // Add source element
-                const source = document.createElement('source');
-                source.src = audioPath;
-                source.type = 'audio/mpeg';
-                this.audio.appendChild(source);
-                
-                console.log('Audio object created');
-                
-                // Debug-Events hinzufügen
-                this.audio.addEventListener('loadstart', () => console.log('Audio loading started'));
-                this.audio.addEventListener('loadeddata', () => console.log('Audio data loaded'));
-                this.audio.addEventListener('error', (e) => console.error('Audio loading error:', e));
-                this.audio.addEventListener('canplay', () => console.log('Audio can be played'));
-                
-                this.audio.volume = 0.3;
-                this.audio.loop = true;
-                console.log('Audio initialized with volume:', this.audio.volume, 'and loop:', this.audio.loop);
-            }
-        } catch (error) {
-            console.error('Error in audio initialization:', error);
+    public init(): Promise<void> {
+        if (this.initPromise) {
+            return this.initPromise;
         }
+
+        this.initPromise = new Promise((resolve, reject) => {
+            try {
+                if (!this.audio) {
+                    const audioPath = 'https://walpurga03.github.io/MatrixCipher/audio/matrix-sound.mp3';
+                    console.log('Initializing audio with path:', audioPath);
+                    
+                    // Create audio element
+                    this.audio = document.createElement('audio');
+                    // Add source element
+                    const source = document.createElement('source');
+                    source.src = audioPath;
+                    source.type = 'audio/mpeg';
+                    this.audio.appendChild(source);
+                    
+                    console.log('Audio object created');
+                    
+                    // Debug-Events hinzufügen
+                    this.audio.addEventListener('loadstart', () => console.log('Audio loading started'));
+                    this.audio.addEventListener('loadeddata', () => console.log('Audio data loaded'));
+                    this.audio.addEventListener('error', (e) => {
+                        console.error('Audio loading error:', e);
+                        reject(e);
+                    });
+                    this.audio.addEventListener('canplay', () => {
+                        console.log('Audio can be played');
+                        resolve();
+                    });
+                    
+                    this.audio.volume = 0.3;
+                    this.audio.loop = true;
+                    console.log('Audio initialized with volume:', this.audio.volume, 'and loop:', this.audio.loop);
+                }
+            } catch (error) {
+                console.error('Error in audio initialization:', error);
+                reject(error);
+            }
+        });
+
+        return this.initPromise;
     }
 
-    public play() {
+    public async play() {
         try {
-            // Wenn Audio nicht initialisiert ist, initialisiere es
-            if (!this.audio) {
-                console.log('Audio not initialized, initializing now...');
-                this.init();
-            }
-
+            // Warte 3 Sekunden bevor wir starten
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            await this.init();
             if (this.audio) {
-                console.log('Attempting to play audio...');
-                const playPromise = this.audio.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise
-                        .then(() => console.log('Audio playing successfully'))
-                        .catch(error => {
-                            console.error('Failed to play audio:', error);
-                            console.log('Audio state:', {
-                                currentSrc: this.audio?.currentSrc,
-                                readyState: this.audio?.readyState,
-                                networkState: this.audio?.networkState,
-                                error: this.audio?.error
-                            });
-                        });
-                }
+                await this.audio.play();
+                console.log('Audio playing');
             } else {
-                console.error('Audio still not initialized after init attempt');
+                throw new Error('Audio still not initialized after init attempt');
             }
         } catch (error) {
-            console.error('Error in play():', error);
+            console.error('Failed to play audio:', error);
         }
     }
 

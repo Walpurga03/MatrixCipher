@@ -60,7 +60,7 @@ export abstract class BaseEncryptionPopup {
             </div>
         `;
         
-        document.body.appendChild(infoPopup);
+        this.overlay.appendChild(infoPopup);
         
         // Event Listener für Schließen-Button
         infoPopup.querySelector('.close-info')?.addEventListener('click', () => {
@@ -99,7 +99,7 @@ export abstract class BaseEncryptionPopup {
 
     public close(): void {
         // Entferne alle Info-Popups
-        const infoPopup = document.querySelector('.caesar-info');
+        const infoPopup = this.overlay.querySelector('.caesar-info');
         if (infoPopup) {
             infoPopup.remove();
         }
