@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatrixCipher</title>
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 5px #00ff00;
+            }
+            50% {
+                box-shadow: 0 0 20px #00ff00;
+            }
+            100% {
+                box-shadow: 0 0 5px #00ff00;
+            }
+        }
+
+        #start-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 1s;
+        }
+
+        #start-button {
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            animation: glowPulse 2s infinite;
+        }
+
+        #start-button:hover {
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 30px #00ff00;
+            transform: scale(1.05);
+        }
+    </style>
+  <script type="module" crossorigin src="/MatrixCipher/assets/index-Buf_JbWi.js"></script>
+  <link rel="stylesheet" crossorigin href="/MatrixCipher/assets/index-6_M9uAg3.css">
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+    <div id="start-container">
+        <button id="start-button">ENTER THE MATRIX</button>
+    </div>
+    <div id="computer-container">
+        <div id="main-container">
+            <div id="tooltip-window"></div>
+            <div id="computer-screen" style="display: none;">
+                <div id="terminal-window" style="display: none;">
+                    <div class="message-line">
+                        <span id="message-text"></span><span id="cursor">_</span>
+                    </div>
+                </div>
+                <div id="text-container">
+                    <div id="message"></div>
+                    <div id="tooltip-container"></div>
+                    <div id="menu" style="display: none;">
+                        <h3>WÄHLE EINE VERSCHLÜSSELUNGSMETHODE:</h3>
+                        <div class="button-grid">
+                            <button class="menu-button" onclick="selectMethod('Caesar Cipher')" data-tooltip="Verschiebe jeden Buchstaben um einen festen Wert">
+                                Caesar
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('Vigenère Cipher')" data-tooltip="Verschlüsseln mit einem wiederkehrenden Schlüssel">
+                                Vigenère
+                            </button>
+                            <!-- <button class="menu-button" onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">
+                                XOR
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('Blowfish')" data-tooltip="Symmetric block cipher">
+                                Blowfish
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('SHA-256')" data-tooltip="Secure hash algorithm, 256-bit">
+                                SHA-256
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('RIPEMD-160')" data-tooltip="160-bit cryptographic hash function">
+                                RIPEMD-160
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('AES')" data-tooltip="Advanced Encryption Standard">
+                                AES
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('RSA')" data-tooltip="Asymmetric encryption using public and private keys">
+                                RSA
+                            </button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Platzhalter für Eingabe-Popups, die durch JavaScript gesteuert werden -->
+    <div id="input-bar" style="display: none;"></div>
+    <script src="https://embed.twentyuno.net/js/app.js"></script>
+
+</body>
+</html>
