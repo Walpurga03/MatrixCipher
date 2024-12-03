@@ -1,3 +1,5 @@
+@use '../../core/utils/variables' as v;
+
 // Base styles for overlays
 .base-overlay {
     position: fixed;
@@ -179,6 +181,43 @@
     
     &.info-active {
         opacity: 0.5;
+    }
+}
+
+@include v.respond-max('xs') {
+    .base-popup {
+        padding: 1.5rem;
+        max-width: 90%;
+        
+        h3 {
+            font-size: 1.4rem;
+        }
+
+        .caesar-controls {
+            button {
+                font-size: 1rem;
+                padding: 0.2rem 0.4rem;
+            }
+        }
+
+        .caesar-input {
+            margin-bottom: 1rem;
+            
+            textarea {
+                min-height: 80px;
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        .caesar-shift {
+            margin-bottom: 1rem;
+            
+            button {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.9rem;
+            }
+        }
     }
 }
 

@@ -1,4 +1,24 @@
-/* layout.scss */
+/* base-layout.scss */
+
+body {
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  font-size: var(--font-size);
+}
+
+#matrixCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
 #computer-container {
   position: fixed;
   top: 50%;
@@ -20,6 +40,32 @@
       rgba(var(--primary-color-rgb), 0.2) 50%,
       transparent 100%
     );
+
+  @media (max-width: 1200px) {
+    max-width: 95%;
+  }
+  
+  @media (max-width: 768px) {
+    max-width: 98%;
+    max-height: 98vh;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+    max-height: 100vh;
+    perspective: 1000px;
+  }
+
+  @media (max-width: 375px) {
+    padding: 0;
+    
+    #computer-screen {
+      border-width: 1px;
+      box-shadow: 
+        0 0 10px rgba(var(--primary-color-rgb), 0.2),
+        inset 0 0 25px rgba(0, 0, 0, 0.5);
+    }
+  }
 
   &::before {
     content: '';
@@ -47,14 +93,6 @@
     background-size: 100% 2px;
     animation: backgroundPulse 15s ease infinite;
     z-index: 1;
-  }
-
-  @media (max-width: 1200px) {
-    max-width: 95%;
-  }
-  
-  @media (max-height: 800px) {
-    max-height: 95vh;
   }
 }
 
@@ -122,12 +160,52 @@
 }
 
 #main-container {
-  position: relative;
   width: 100%;
   height: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
+
+  @media (max-width: 375px) {
+    padding: 5px;
+    
+    #computer-screen {
+      width: 95%;
+      padding: 20px 10px;
+    }
+
+    .button-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .menu-button {
+      font-size: 14px;
+      padding: 8px;
+    }
+
+    #message {
+      font-size: 14px;
+      margin: 10px 0;
+    }
+
+    #terminal-window {
+      padding: 10px;
+      margin: 5px;
+    }
+  }
 }
 
 #tooltip-window {

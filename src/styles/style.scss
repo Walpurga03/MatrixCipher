@@ -1,8 +1,8 @@
-@use '../core/utils/variables';
-@use '../core/base/base';
 @use 'core/layout';
+@use '../core/utils/variables';
 @use 'core/inputBar';
 @use 'components/menu/menu';
 @use 'components/ciphers/caesar';
 @use 'components/ciphers/vigenere';
 @use 'components/encryption-popup';
+@use 'start-button';

@@ -5,60 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MatrixCipher</title>
     <link rel="stylesheet" href="./src/styles/style.scss">
-    <style>
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-        }
 
-        @keyframes glowPulse {
-            0% {
-                box-shadow: 0 0 5px #00ff00;
-            }
-            50% {
-                box-shadow: 0 0 20px #00ff00;
-            }
-            100% {
-                box-shadow: 0 0 5px #00ff00;
-            }
-        }
-
-        #start-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            opacity: 0;
-            animation: fadeIn 2s ease-out forwards;
-            animation-delay: 1s;
-        }
-
-        #start-button {
-            padding: 15px 30px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #00ff00;
-            border: 2px solid #00ff00;
-            cursor: pointer;
-            font-family: monospace;
-            font-size: 1.2em;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            animation: glowPulse 2s infinite;
-        }
-
-        #start-button:hover {
-            background: rgba(0, 255, 0, 0.1);
-            box-shadow: 0 0 30px #00ff00;
-            transform: scale(1.05);
-        }
-    </style>
 </head>
 <body>
     <canvas id="matrixCanvas"></canvas>
@@ -86,7 +33,7 @@
                             <button class="menu-button" onclick="selectMethod('Vigenère Cipher')" data-tooltip="Verschlüsseln mit einem wiederkehrenden Schlüssel">
                                 Vigenère
                             </button>
-                            <!-- <button class="menu-button" onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">
+                            <button class="menu-button" onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">
                                 XOR
                             </button>
                             <button class="menu-button" onclick="selectMethod('Blowfish')" data-tooltip="Symmetric block cipher">
@@ -103,7 +50,7 @@
                             </button>
                             <button class="menu-button" onclick="selectMethod('RSA')" data-tooltip="Asymmetric encryption using public and private keys">
                                 RSA
-                            </button> -->
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -111,9 +58,6 @@
         </div>
     </div>
 
-    <!-- Platzhalter für Eingabe-Popups, die durch JavaScript gesteuert werden -->
-    <div id="input-bar" style="display: none;"></div>
-    <script src="https://embed.twentyuno.net/js/app.js"></script>
 
     <script type="module">
         import startMatrixAnimation from './src/core/animation/matrix_rain.ts';
