@@ -1,6 +1,5 @@
 import CryptoJS from "crypto-js";
 import { displayResult } from "../../../../encryption/shared/encryptions";
-import { initializeAndShowWidget, hideWidget } from "../../../../core/utils/widgetUtils";
 
 export function showBlowfishCipherPopup() {
     const inputBar = document.getElementById('input-bar') as HTMLElement;
@@ -34,12 +33,10 @@ export function showBlowfishCipherPopup() {
     document.getElementById('blowfishInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('blowfishInfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
-        initializeAndShowWidget();
     });
     document.getElementById('blowfishCloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('blowfishInfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
-        hideWidget();
     });
 }
 

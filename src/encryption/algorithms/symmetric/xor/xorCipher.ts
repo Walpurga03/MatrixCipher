@@ -1,5 +1,4 @@
 import { displayResult } from "../../../../encryption/shared/encryptions";
-import { initializeAndShowWidget, hideWidget } from "../../../../core/utils/widgetUtils";
 
 
 export function showXorCipherPopup() {
@@ -35,12 +34,10 @@ export function showXorCipherPopup() {
     document.getElementById('xorInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('xorInfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
-        initializeAndShowWidget();
     });
     document.getElementById('xorCloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('xorInfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
-        hideWidget();
     });
 }
 

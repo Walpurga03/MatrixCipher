@@ -1,6 +1,5 @@
 import CryptoJS from "crypto-js";
 import { displayResult } from "../../../encryption/shared/encryptions";
-import { initializeAndShowWidget, hideWidget } from "../../../core/utils/widgetUtils";
 
 export function showRipemd160CipherPopup() {
     const inputBar = document.getElementById('input-bar') as HTMLElement;
@@ -30,12 +29,10 @@ export function showRipemd160CipherPopup() {
     document.getElementById('ripemd160InfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('ripemd160InfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
-        initializeAndShowWidget();
     });
     document.getElementById('ripemd160CloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('ripemd160InfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
-        hideWidget();
     });
 }
 

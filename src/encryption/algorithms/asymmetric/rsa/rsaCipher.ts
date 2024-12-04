@@ -1,6 +1,5 @@
 import { generateKeyPair, encrypt, decrypt } from "./rsaUtils";
 import { displayResult } from "../../../../encryption/shared/encryptions";
-import { initializeAndShowWidget, hideWidget } from "../../../../core/utils/widgetUtils";
 
 
 export function showRsaCipherPopup() {
@@ -31,13 +30,11 @@ export function showRsaCipherPopup() {
     document.getElementById('rsaInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('rsaInfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
-        initializeAndShowWidget();
 
     });
     document.getElementById('rsaCloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('rsaInfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
-        hideWidget();
     });
 }
 

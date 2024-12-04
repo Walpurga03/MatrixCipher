@@ -1,6 +1,5 @@
 import CryptoJS from "crypto-js";
 import { displayResult } from "../../../encryption/shared/encryptions";
-import { initializeAndShowWidget, hideWidget } from "../../../core/utils/widgetUtils";
 
 
 export function showSha256CipherPopup() {
@@ -31,13 +30,11 @@ export function showSha256CipherPopup() {
     document.getElementById('sha256InfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('sha256InfoPopup') as HTMLElement;
         infoPopup.style.display = 'block';
-        initializeAndShowWidget();
 
     });
     document.getElementById('sha256CloseInfoButton')?.addEventListener('click', () => {
         const infoPopup = document.getElementById('sha256InfoPopup') as HTMLElement;
         infoPopup.style.display = 'none';
-        hideWidget();
     });
 }
 
