@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatrixCipher</title>
+
+  <script type="module" crossorigin src="/MatrixCipher/assets/index-CV5qkC9z.js"></script>
+  <link rel="stylesheet" crossorigin href="/MatrixCipher/assets/index-CtwXNhbS.css">
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+    <div id="start-container">
+        <button id="start-button">ENTER THE MATRIX</button>
+    </div>
+    <div id="computer-container">
+        <div id="main-container">
+            <div id="tooltip-window"></div>
+            <div id="computer-screen" style="display: none;">
+                <div id="terminal-window" style="display: none;">
+                    <div class="message-line">
+                        <span id="message-text"></span><span id="cursor">_</span>
+                    </div>
+                </div>
+                <div id="text-container">
+                    <div id="message"></div>
+                    <div id="tooltip-container"></div>
+                    <div id="menu" style="display: none;">
+                        <h3>WÄHLE EINE VERSCHLÜSSELUNGSMETHODE:</h3>
+                        <div class="button-grid">
+                            <button class="menu-button" onclick="selectMethod('Caesar Cipher')" data-tooltip="Verschiebe jeden Buchstaben um einen festen Wert">
+                                Caesar
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('Vigenère Cipher')" data-tooltip="Verschlüsseln mit einem wiederkehrenden Schlüssel">
+                                Vigenère
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('XOR')" data-tooltip="Exclusive OR operation on text">
+                                XOR
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('Blowfish')" data-tooltip="Symmetric block cipher">
+                                Blowfish
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('SHA-256')" data-tooltip="Secure hash algorithm, 256-bit">
+                                SHA-256
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('RIPEMD-160')" data-tooltip="160-bit cryptographic hash function">
+                                RIPEMD-160
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('AES')" data-tooltip="Advanced Encryption Standard">
+                                AES
+                            </button>
+                            <button class="menu-button" onclick="selectMethod('RSA')" data-tooltip="Asymmetric encryption using public and private keys">
+                                RSA
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
