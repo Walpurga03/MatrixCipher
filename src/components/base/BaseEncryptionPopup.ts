@@ -3,38 +3,45 @@ export abstract class BaseEncryptionPopup {
     protected popup!: HTMLDivElement;
     protected resultDiv!: HTMLDivElement;
     protected infoPopup!: HTMLDivElement;
+    protected type: string;
 
     constructor(protected title: string) {
+        this.type = this.getType();
         this.createBaseStructure();
+    }
+
+    protected getType(): string {
+        // Extrahiere den Typ aus dem Klassennamen (z.B. "caesar" aus "CaesarPopup")
+        return this.constructor.name.replace('Popup', '').toLowerCase();
     }
 
     protected createBaseStructure(): void {
         // Erstelle Overlay und Popup
         this.overlay = document.createElement('div');
-        this.overlay.className = 'caesar-overlay';
+        this.overlay.className = `${this.type}-overlay`;
         
         this.popup = document.createElement('div');
-        this.popup.className = 'caesar-popup';
+        this.popup.className = `${this.type}-popup`;
         
         // Basis-Popup-Struktur
         this.popup.innerHTML = `
-            <div class="caesar-controls">
+            <div class="${this.type}-controls">
                 <button class="info-button" title="Info zur Verschlüsselung">ℹ</button>
                 <button class="close-button" title="Schließen">&times;</button>
             </div>
             
-            <div class="caesar-header">
+            <div class="${this.type}-header">
                 <h3>${this.title}</h3>
             </div>
             
             ${this.getCustomControls()}
             
-            <div class="caesar-actions">
+            <div class="${this.type}-actions">
                 <button class="encrypt-btn">Verschlüsseln</button>
                 <button class="decrypt-btn">Entschlüsseln</button>
             </div>
             
-            <div class="caesar-result">
+            <div class="${this.type}-result">
                 <h4>Ergebnis:</h4>
                 <div class="result-text"></div>
             </div>
@@ -46,34 +53,36 @@ export abstract class BaseEncryptionPopup {
 
     protected showInfo(): void {
         const infoPopup = document.createElement('div');
-        infoPopup.className = 'caesar-info';
+        infoPopup.className = `${this.type}-info`;
         
         // Hauptpopup ausblenden
-        this.popup.classList.add('info-active');
+        this.popup.style.display = 'none';
         
-        const infoContent = this.getInfoContent();
         infoPopup.innerHTML = `
-            <button class="close-info">&times;</button>
-            <h4>${this.title}</h4>
+            <button class="close-info" title="Schließen">&times;</button>
+            <h4>Info zur ${this.title}</h4>
             <div class="info-content">
-                ${infoContent}
+                ${this.getInfoContent()}
             </div>
         `;
         
         this.overlay.appendChild(infoPopup);
+        this.infoPopup = infoPopup;
         
-        // Event Listener für Schließen-Button
-        infoPopup.querySelector('.close-info')?.addEventListener('click', () => {
-            this.hideInfo(infoPopup);
-        });
+        // Event-Listener für Schließen-Button
+        const closeButton = infoPopup.querySelector('.close-info');
+        if (closeButton) {
+            closeButton.addEventListener('click', () => {
+                this.hideInfo();
+            });
+        }
     }
 
-    protected hideInfo(infoPopup: HTMLDivElement): void {
-        // Info-Popup entfernen
-        infoPopup.remove();
-        
-        // Hauptpopup wieder einblenden
-        this.popup.classList.remove('info-active');
+    protected hideInfo(): void {
+        if (this.infoPopup) {
+            this.infoPopup.remove();
+            this.popup.style.display = 'block';
+        }
     }
 
     protected abstract getInfoContent(): string;
@@ -99,11 +108,11 @@ export abstract class BaseEncryptionPopup {
 
     public close(): void {
         // Entferne alle Info-Popups
-        const infoPopup = this.overlay.querySelector('.caesar-info');
+        const infoPopup = this.overlay.querySelector(`.${this.type}-info`);
         if (infoPopup) {
             infoPopup.remove();
         }
-        this.popup.classList.remove('info-active');
+        this.popup.style.display = 'block';
         this.overlay.remove();
     }
 
